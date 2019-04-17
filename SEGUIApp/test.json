@@ -1,0 +1,39 @@
+{
+  "Exchanges": {
+    "Binance": [
+      {
+        "id": 1,
+        "address": "wss://stream.binance.com:9443/stream?streams=btcusdt@trade/btcusdt@depth",
+        "description": "USDT-BTC trades and depth",
+        "depthAddress": "https://www.binance.com/api/v1/depth?symbol=BTCUSDT&limit=1000",
+        "symbol": "USDT-BTC"
+      },
+      {
+        "id": 2,
+        "address": "wss://stream.binance.com:9443/ws/xrpusdt@trade",
+        "description": "BTC-ETH trades",
+        "depthAddress": "",
+        "symbol": "BTC-ETH"
+      },
+      {
+        "id": 3,
+        "address": "wss://steam.binance.com:9443/ws/btdt@trade",
+        "description": "Fake for fail purpose!",
+        "depthAddress": "",
+        "symbol": "FAKE"
+      }
+    ],
+    "BitMex": [
+      {
+        "id": 1,
+        "address": "wss:://mex1test",
+        "description": "conn nr 1"
+      },
+      {
+        "id": 2,
+        "address": "wss:://mex1test",
+        "description": "conn nr 1"
+      }
+    ]
+  }
+}
