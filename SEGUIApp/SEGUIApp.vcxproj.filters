@@ -73,7 +73,7 @@
     <ClCompile Include="src\SEGUIApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RecentTradesModel.cpp">
+    <ClCompile Include="src\RecentTradesModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,7 +95,7 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RecentTradesModel.h">
+    <ClInclude Include="include\RecentTradesModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
