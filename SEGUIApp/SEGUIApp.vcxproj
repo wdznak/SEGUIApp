@@ -148,6 +148,7 @@
     <QtMoc Include="include\ConnectionsTabManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="RecentTradesModel.cpp" />
     <ClCompile Include="src\AvailableConnectionsDialog.cpp" />
     <ClCompile Include="src\Broadcaster.cpp" />
     <ClCompile Include="src\ConnectionsManager.cpp" />
@@ -159,7 +160,11 @@
     <QtUic Include="Resources\QtUi\AvailableConnections.ui" />
     <QtUic Include="Resources\QtUi\ConnectionsTabWidget.ui" />
     <QtUic Include="Resources\QtUi\ConnectionTab.ui" />
+    <QtUic Include="Resources\QtUi\RecentTradesWidget.ui" />
     <QtUic Include="Resources\QtUi\SEGUIApp.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="RecentTradesModel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -73,6 +73,9 @@
     <ClCompile Include="src\SEGUIApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RecentTradesModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Resources\QtUi\AvailableConnections.ui">
@@ -87,5 +90,13 @@
     <QtUic Include="Resources\QtUi\ConnectionTab.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="Resources\QtUi\RecentTradesWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="RecentTradesModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
