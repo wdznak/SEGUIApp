@@ -12,4 +12,7 @@ Currently, the app is running on a Microsoft Azure virtual machine from 10/05/19
 
 
 Data saved and compressed with 7zip
+
+
+
 ![](../assets/files.png)
