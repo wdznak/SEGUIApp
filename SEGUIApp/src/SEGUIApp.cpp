@@ -14,10 +14,9 @@ namespace SEGUIApp {
 	{
 		qRegisterMetaType < std::string >();
 		ui.setupUi(this);
-		helpMe = new HelpMe();
 
 		connectionsTabManager_ = new ConnectionsTabManager();
-		connectionsManager_ = new ConnectionsManager();
+		connectionsManager_ = new ConnectionsManager(&modelsManager_);
 
 		ui.mainVLayout->addWidget(connectionsTabManager_);
 		

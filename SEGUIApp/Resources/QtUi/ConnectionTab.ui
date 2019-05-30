@@ -22,7 +22,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QListView" name="tradesList"/>
+    <widget class="QTableView" name="recentTradesView"/>
    </item>
   </layout>
  </widget>

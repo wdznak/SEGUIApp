@@ -53,6 +53,15 @@
     <QtMoc Include="include\ConnectionsManager.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="include\BinMessageDispatch.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="include\DispatchI.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ModelsManager.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AvailableConnectionsDialog.cpp">
@@ -96,6 +105,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\RecentTradesModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MessageDispatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ANamespace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ConnectionTab.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

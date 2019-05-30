@@ -1,5 +1,10 @@
 #include "RecentTradesModel.h"
 
+#include <time.h>
+#include <iomanip>
+#include <sstream>
+#include <string>
+
 namespace SEGUIApp {
 
 	RecentTradesModel::RecentTradesModel()
@@ -9,6 +14,15 @@ namespace SEGUIApp {
 
 	RecentTradesModel::~RecentTradesModel()
 	{
+	}
+
+	QVariant msToTime(size_t ms) {
+		time_t t = ms / 1000;
+		tm buf;
+		std::stringstream ss;
+		gmtime_s(&buf, &t);
+		ss << std::put_time(&buf, "%H:%M:%S");
+		return std::string(ss.str()).data();
 	}
 
 	// Data is returned to the view in reverse order so the newest 
@@ -21,8 +35,8 @@ namespace SEGUIApp {
 			switch (index.column()) {
 				case 0: return data_[tempIdx].price;
 				case 1: return data_[tempIdx].size;
-				case 2: return data_[tempIdx].time;
-				case 3: return data_[tempIdx].isBuy ? "B" : "S";
+				case 2: return msToTime(data_[tempIdx].time);
+				case 3: return data_[tempIdx].isBuy;
 				default: return QVariant{};
 			}
 		}

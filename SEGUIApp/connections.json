@@ -3,24 +3,45 @@
     "Binance": [
       {
         "id": 1,
-        "address": "wss://stream.binance.com:9443/stream?streams=btcusdt@trade/btcusdt@depth",
-        "description": "USDT-BTC trades and depth",
+        "address": "wss://stream.binance.com:9443/stream?streams=btcusdt@depth/btcusdt@trade",
+        "description": "USDT-BTC trades, depth",
         "depthAddress": "https://www.binance.com/api/v1/depth?symbol=BTCUSDT&limit=1000",
         "symbol": "USDT-BTC"
       },
       {
         "id": 2,
-        "address": "wss://stream.binance.com:9443/ws/xrpusdt@trade",
-        "description": "BTC-ETH trades",
-        "depthAddress": "",
-        "symbol": "BTC-ETH"
+        "address": "wss://stream.binance.com:9443/stream?streams=ethusdt@depth/ethusdt@trade",
+        "description": "USDT-ETH trades, depth",
+        "depthAddress": "https://www.binance.com/api/v1/depth?symbol=ETHUSDT&limit=1000",
+        "symbol": "USDT-ETH"
       },
       {
         "id": 3,
-        "address": "wss://steam.binance.com:9443/ws/btdt@trade",
-        "description": "Fake for fail purpose!",
-        "depthAddress": "",
-        "symbol": "FAKE"
+        "address": "wss://stream.binance.com:9443/stream?streams=btctusd@depth/btctusd@trade",
+        "description": "TUSD-BTC trades, depth",
+        "depthAddress": "https://www.binance.com/api/v1/depth?symbol=BTCTUSD&limit=1000",
+        "symbol": "TUSD-BTC"
+      },
+      {
+        "id": 4,
+        "address": "wss://stream.binance.com:9443/stream?streams=ethtusd@depth/ethtusd@trade",
+        "description": "TUSD-ETH trades, depth",
+        "depthAddress": "https://www.binance.com/api/v1/depth?symbol=ETHTUSD&limit=1000",
+        "symbol": "TUSD-ETH"
+      },
+      {
+        "id": 5,
+        "address": "wss://stream.binance.com:9443/stream?streams=ethbtc@depth/ethbtc@trade",
+        "description": "ETH-BTC trades, depth",
+        "depthAddress": "https://www.binance.com/api/v1/depth?symbol=ETHBTC&limit=1000",
+        "symbol": "ETH-BTC"
+      },
+      {
+        "id": 6,
+        "address": "wss://stream.binance.com:9443/stream?streams=trxbtc@depth/trxbtc@trade",
+        "description": "TRX-BTC trades, depth",
+        "depthAddress": "https://www.binance.com/api/v1/depth?symbol=TRXBTC&limit=1000",
+        "symbol": "TRX-BTC"
       }
     ],
     "BitMex": [

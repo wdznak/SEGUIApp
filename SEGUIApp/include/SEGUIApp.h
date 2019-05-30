@@ -19,16 +19,9 @@
 #include "AvailableConnectionsDialog.h"
 #include "ConnectionsManager.h"
 #include "ConnectionsTabManager.h"
+#include "ModelsManager.h"
 
 namespace SEGUIApp {
-
-	class HelpMe : public QObject {
-		Q_OBJECT
-	public:
-		int i;
-	signals:
-		void newMsg(int, const std::string&);
-	};
 
 	class SEGUIApp : public QMainWindow
 	{
@@ -38,12 +31,12 @@ namespace SEGUIApp {
 		AvailableConnectionsDialog* availableConnections_;
 		ConnectionsManager* connectionsManager_;
 		ConnectionsTabManager* connectionsTabManager_;
+		ModelsManager modelsManager_;
 		seservice::SEConnection* seConnection_;
 		QDialog* dialog;
 		std::function<void(int, std::string, seservice::ErrorCode)> err;
 		std::function<void(int, std::string)> msgCb;
 
-		HelpMe* helpMe;
 
 	public:
 		SEGUIApp(QWidget *parent = Q_NULLPTR);

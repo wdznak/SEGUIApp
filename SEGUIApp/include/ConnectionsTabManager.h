@@ -4,8 +4,9 @@
 
 #include <string>
 
-#include "ui_ConnectionTab.h"
+#include "ConnectionTab.h"
 #include "ui_ConnectionsTabWidget.h"
+#include "ModelsManager.h"
 
 namespace SEGUIApp {
 
@@ -16,18 +17,21 @@ namespace SEGUIApp {
 		Ui::ConnectionsTabWidget connectionsTab_;
 		bool isStartTabActive{ true };
 
+		RecentTradesModel recentModel;
+
 	public:
 		ConnectionsTabManager();
 		~ConnectionsTabManager();
 
-		void addNewTab(int uniqueId, const QString& exchangeName,const QString& symbol) {
-			QWidget* newTab = new QWidget();
-			newTab->setProperty("uniqueId", QVariant(uniqueId));
-			newTab->setProperty("exchangeName", QVariant(exchangeName));
-			Ui::ConnectionTab* connectionTab = new Ui::ConnectionTab();
-			connectionTab->setupUi(newTab);
-			connectionTab->connectionLabel->setText(exchangeName + " " + symbol);
-			connectionsTab_.tabWidget->addTab(newTab, symbol);
+		void addNewTab(int uniqueId, const QString& exchangeName, const QString& symbol, const Models* models) {
+			ConnectionTab* connectionTab = new ConnectionTab();
+			connectionTab->setProperty("uniqueId", QVariant(uniqueId));
+			connectionTab->setProperty("exchangeName", QVariant(exchangeName));
+			connectionTab->setTabName(exchangeName + " " + symbol);
+			if (models) connectionTab->setRecentTradesModel(models->recentTrades.get());
+
+			int index = connectionsTab_.tabWidget->addTab(connectionTab, symbol);
+			connectionsTab_.tabWidget->setCurrentIndex(index);
 		}
 
 	private:

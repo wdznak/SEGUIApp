@@ -39,10 +39,6 @@ namespace SEGUIApp {
 		if (QWidget* widget = connectionsTab_.tabWidget->widget(index)) {
 			QVariant uniqueId;
 			QVariant exchangeName;
-			if (widget == connectionsTab_.startTab) {
-				removeStartTab(index);
-				return;
-			}
 
 			QMessageBox msgBox;
 			QLabel* connectionLabel = widget->findChild<QLabel*>("connectionLabel");

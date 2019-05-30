@@ -3,15 +3,10 @@
 
 #include <QAbstractTableModel>
 
+#include "BinMessageDispatch.h"
+
 namespace SEGUIApp {
-
-	struct Trade {
-		size_t price;
-		size_t size;
-		QString time;
-		bool isBuy;
-	};
-
+	
 	// Model is in the form of ring buffer to avoid memory bloat.
 	// Maximum size is specified by "maxArraySize".
 	class RecentTradesModel : public QAbstractTableModel
@@ -34,7 +29,7 @@ namespace SEGUIApp {
 		QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
 		template<typename T>
-		void insertData(T&& data) {
+		void insertData(const T& data) {
 			QModelIndex index = QAbstractTableModel::index(0, 0);
 			if (currentSize < maxArraySize_) {
 				emit QAbstractItemModel::beginInsertRows(QModelIndex{}, 0, 0);
