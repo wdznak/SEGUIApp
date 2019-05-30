@@ -7,6 +7,6 @@
 
 The main goal of this project is to test different approaches to design an app and improve my multithreading knowledge. In future releases, I'm going to implement a python module that will use gathered data to feed machine learning models.
 
-Currently app is running on Microsoft Azure virtual machine from 10/05/2019 without any issues.
+Currently, the app is running on a Microsoft Azure virtual machine from 10/05/2019 without any issues. 
 ![](../assets/app.png)
 ![](../assets/files.png)
