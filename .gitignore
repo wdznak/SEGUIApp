@@ -420,3 +420,5 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+SEServiceOLD/
+uWebSockets/
