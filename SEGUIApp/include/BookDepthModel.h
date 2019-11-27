@@ -2,6 +2,8 @@
 
 #include <QtCore/QDebug>
 #include <QtGlobal>
+#include <QtGui/QBrush>
+#include <QtGui/QColor>
 
 #include <fstream>
 #include <map>
@@ -18,16 +20,19 @@ namespace SEGUIApp {
 		using baList_t = std::vector<std::vector<std::string>>;
 
 	private:
-		struct compare {
-			bool operator()(const std::string& lhs, const std::string& rhs) const {
-				return std::stof(lhs) > std::stof(rhs);
-			}
+		struct Order {
+			float size_;
+			bool isBid_ = false;
+
+			Order() = default;
+
+			Order(float size, bool isBid)
+				: size_(size), isBid_(isBid) {}
 		};
 
-		std::map<float, float> orderBook_;
+		std::map<float, Order> orderBook_;
 		bool isBookFilled = false;
 		size_t updateId_ = 0;
-		float midPoint_;
 
 	public:
 		BookDepthModel() {}
@@ -47,8 +52,25 @@ namespace SEGUIApp {
 
 				switch (index.column()) {
 					case 0: return it->first;
-					case 1: return it->second;
+					case 1: return it->second.size_;
 					default: return QVariant{};
+				}
+			}
+
+			if (role == Qt::BackgroundRole) {
+				if (index.row() > orderBook_.size() - 1)
+					return QVariant();
+
+				auto it = orderBook_.begin();
+				std::advance(it, index.row());
+
+				if (it->second.isBid_) {
+					QColor color("#ff5c5c");
+					return QBrush(color);
+				}
+				else {
+					QColor color("#95fa5f");
+					return QBrush(color);
 				}
 			}
 
@@ -71,15 +93,11 @@ namespace SEGUIApp {
 
 		void fillBook(const size_t updateId, const baList_t& bids, const baList_t& asks) {
 			std::for_each(bids.begin(), bids.end(), [&orderBook_ = orderBook_](const std::vector<std::string>& bid) {
-				orderBook_.emplace(std::stof(bid[0]), std::stof(bid[1]));
+				orderBook_.emplace(std::stof(bid[0]), Order{ std::stof(bid[1]), true });
 			});
 
-			if (!orderBook_.empty()) {
-				midPoint_ = orderBook_.begin()->first;
-			}
-
 			std::for_each(asks.begin(), asks.end(), [&orderBook_ = orderBook_](const std::vector<std::string>& ask) {
-				orderBook_.emplace(std::stof(ask[0]), std::stof(ask[1]));
+				orderBook_.emplace(std::stof(ask[0]), Order{ std::stof(ask[1]), false });
 			});
 
 			isBookFilled = true;
@@ -89,53 +107,57 @@ namespace SEGUIApp {
 			Q_UNUSED(parent);
 			return orderBook_.size();
 		}
-		// !!!!!!!!!!!!!! UPDATE TABLEVIEW ONLY WHEN FULL BATCH OF BIDS AND ASKS 
-		// HAS BEEN UPDATED. DONT DO UPDATE PER BID CAUSE DATA AROUND MIDPOINT
-		// CAN BE SKEWED
-		void updateAsks(const std::string& price, const std::string& size) {
+		
+		void updateBidAsk(bool isBid, const std::string& price, const std::string& size) {
 			float fPrice = std::stof(price);
 			float fSize	 = std::stof(size);
-
-			if (midPoint_ < fPrice) {
-				midPoint_ = fPrice;
-			}
-			else if (midPoint_ == fPrice && fSize == .0f) {
-				auto it = orderBook_.find(fPrice);
-
-				if (it != orderBook_.end() && ++it != orderBook_.end()) {
-					midPoint_ = it->first;
-				}
-				else {
-					midPoint_ = -1;
-				}
-			}
+			auto it = orderBook_.find(fPrice);
+			auto row = std::distance(orderBook_.begin(), it);
 
 			if (fSize == .0f) {
-				orderBook_.erase(fPrice);
+				if (it != orderBook_.end()) {
+					QAbstractItemModel::beginRemoveRows(QModelIndex(), row, row);
+					orderBook_.erase(it);
+					QAbstractItemModel::endRemoveRows();
+				}
 			}
 			else {
-				orderBook_[fPrice] = fSize;
+				if (it != orderBook_.end()) {
+					orderBook_[fPrice] = { fSize, isBid };
+					QModelIndex index = QAbstractTableModel::index(row, 0);
+					emit dataChanged(index, this->index(row, 2), {});
+				}
+				else {
+					QAbstractItemModel::beginInsertRows(QModelIndex(), row, row);
+					orderBook_[fPrice] = { fSize, isBid };
+					QAbstractItemModel::endInsertRows();
+				}
 			}
 		}
 
 		void updateBids(const std::string& price, const std::string& size) {
 			float fPrice = std::stof(price);
 			float fSize = std::stof(size);
+			auto it = orderBook_.find(fPrice);
+			auto row = std::distance(orderBook_.begin(), it);
 
 			if (fSize == .0f) {
-				orderBook_.erase(fPrice);
+				if (it != orderBook_.end()) {
+					QAbstractItemModel::beginRemoveRows(QModelIndex(), row, row);
+					orderBook_.erase(it);
+					QAbstractItemModel::endRemoveRows();
+				}
 			}
 			else {
-				orderBook_[fPrice] = fSize;
-			}
-
-			if (midPoint_ > fPrice) {
-				auto it = orderBook_.find(fPrice);
-				if (it != orderBook_.end() && ++it != orderBook_.end()) {
-					midPoint_ = it->first;
+				if (it != orderBook_.end()) {
+					orderBook_[fPrice] = { fSize, true };
+					QModelIndex index = QAbstractTableModel::index(row, 0);
+					emit dataChanged(index, this->index(row, 2), {});
 				}
 				else {
-					midPoint_ = -1;
+					QAbstractItemModel::beginInsertRows(QModelIndex(), row, row);
+					orderBook_[fPrice] = { fSize, true };
+					QAbstractItemModel::endInsertRows();
 				}
 			}
 		}

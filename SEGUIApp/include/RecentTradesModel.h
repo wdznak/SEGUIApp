@@ -32,7 +32,7 @@ namespace SEGUIApp {
 		void insertData(const T& data) {
 			QModelIndex index = QAbstractTableModel::index(0, 0);
 			if (currentSize < maxArraySize_) {
-				emit QAbstractItemModel::beginInsertRows(QModelIndex{}, 0, 0);
+				emit QAbstractItemModel::beginInsertRows(QModelIndex(), 0, 0);
 				data_[endIndex_] = data;
 				emit QAbstractItemModel::endInsertRows();
 				endIndex_ = ++currentSize;

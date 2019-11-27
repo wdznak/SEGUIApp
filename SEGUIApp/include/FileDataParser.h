@@ -70,14 +70,14 @@ namespace SEGUIApp {
 							std::string price = bid[0].GetString();
 							std::string size = bid[1].GetString();
 
-							model_.updateBids(price, size);
+							model_.updateBidAsk(true, price, size);
 						});
 
 						std::for_each(asks.Begin(), asks.End(), [&](const rj::Value& ask) {
 							std::string price = ask[0].GetString();
 							std::string size = ask[1].GetString();
 
-							model_.updateAsks(price, size);
+							model_.updateBidAsk(false, price, size);
 						});
 					}
 				}
