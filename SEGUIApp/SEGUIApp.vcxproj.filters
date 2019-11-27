@@ -59,7 +59,10 @@
     <QtMoc Include="include\DispatchI.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="ModelsManager.h">
+    <QtMoc Include="include\BookDepthHBC.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ModelsManager.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -83,6 +86,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\RecentTradesModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BookDepthHBC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BookDepthModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileDataParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -114,6 +126,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ConnectionTab.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BookDepthModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FileDataParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

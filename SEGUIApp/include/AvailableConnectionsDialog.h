@@ -1,13 +1,13 @@
 #pragma once
-#include <QDialog>
+#include <QtWidgets/QDialog>
 #include "ui_AvailableConnections.h"
 
 #include <tuple>
 
-#include <QDebug>
-#include <QListWidget>
-#include <QListWidgetItem>
-#include <QString>
+#include <QtCore/QDebug>
+#include <QtWidgets/QListWidget>
+#include <QtWidgets/QListWidgetItem>
+#include <QtCore/QString>
 
 namespace SEGUIApp {
 	namespace {

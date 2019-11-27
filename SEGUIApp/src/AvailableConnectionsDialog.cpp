@@ -1,6 +1,6 @@
 #include "AvailableConnectionsDialog.h"
 
-#include <QDebug>
+#include <QtCore/QDebug>
 
 namespace SEGUIApp {
 

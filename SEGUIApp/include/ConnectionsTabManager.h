@@ -1,12 +1,16 @@
 #pragma once
 
-#include <QDebug>
+#include <QtCore/QDebug>
 
 #include <string>
 
+#include "BookDepthHBC.h"
 #include "ConnectionTab.h"
-#include "ui_ConnectionsTabWidget.h"
 #include "ModelsManager.h"
+#include "ui_ConnectionsTabWidget.h"
+
+#include "BookDepthModel.h"
+#include "FileDataParser.h"
 
 namespace SEGUIApp {
 
@@ -24,11 +28,23 @@ namespace SEGUIApp {
 		~ConnectionsTabManager();
 
 		void addNewTab(int uniqueId, const QString& exchangeName, const QString& symbol, const Models* models) {
+
+			/* --------  Delete This!  -------- */
+			BookDepthModel* bdm = new BookDepthModel();
+			FileDataParser* fdp = new FileDataParser(*bdm);
+			/* --------       !!!      -------- */
+			
 			ConnectionTab* connectionTab = new ConnectionTab();
 			connectionTab->setProperty("uniqueId", QVariant(uniqueId));
 			connectionTab->setProperty("exchangeName", QVariant(exchangeName));
 			connectionTab->setTabName(exchangeName + " " + symbol);
-			if (models) connectionTab->setRecentTradesModel(models->recentTrades.get());
+			//if (models) connectionTab->setRecentTradesModel(models->recentTrades.get());
+			connectionTab->setBookDepthModel(bdm);
+
+			/* ------ Remove this ------ */
+			BookDepthHBC* bd = new BookDepthHBC();
+			connectionTab->setBookDepthWidget();
+			/* ------     End     ------ */
 
 			int index = connectionsTab_.tabWidget->addTab(connectionTab, symbol);
 			connectionsTab_.tabWidget->setCurrentIndex(index);

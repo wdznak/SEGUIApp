@@ -4,8 +4,8 @@
 #include <memory>
 #include <vector>
 
-#include <QObject>
-#include <QDebug>
+#include <QtCore/QObject>
+#include <QtCore/QDebug>
 
 #include "DispatchI.h"
 #include "RecentTradesModel.h"

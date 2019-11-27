@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include <QObject>
+#include <QtCore/QObject>
 
 #include "BinMessageDispatch.h"
 #include "DispatchI.h"

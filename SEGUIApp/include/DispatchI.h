@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include <QMetaType>
-#include <QObject>
+#include <QtCore/QMetaType>
+#include <QtCore/QObject>
 
 namespace SEGUIApp {
 

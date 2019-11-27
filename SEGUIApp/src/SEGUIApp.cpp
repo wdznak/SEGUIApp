@@ -3,7 +3,8 @@
 #include <tuple>
 #include <variant>
 
-#include <QListWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QListWidget>
 
 #include <uWS/uWS.h>
 

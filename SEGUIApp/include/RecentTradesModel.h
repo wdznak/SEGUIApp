@@ -1,7 +1,7 @@
 #pragma once
 #include <array>
 
-#include <QAbstractTableModel>
+#include <QtCore/QAbstractTableModel>
 
 #include "BinMessageDispatch.h"
 

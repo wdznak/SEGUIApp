@@ -1,6 +1,7 @@
 #include "ConnectionsTabManager.h"
 
-#include <QMessageBox>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QTabWidget>
 
 namespace SEGUIApp {
 
@@ -20,7 +21,7 @@ namespace SEGUIApp {
 
 	void ConnectionsTabManager::addStartTab() {
 		if (!isStartTabActive) {
-			connectionsTab_.tabWidget->insertTab(0, connectionsTab_.startTab, "Start page");
+			connectionsTab_.tabWidget->insertTab(0, connectionsTab_.startTab, tr("Start page"));
 			isStartTabActive = true;
 		}
 	}
@@ -29,7 +30,6 @@ namespace SEGUIApp {
 		if (isStartTabActive) {
 			connectionsTab_.tabWidget->removeTab(index);
 			isStartTabActive = false;
-			qDebug() << "Start Tab is removed!";
 		}
 	}
 
@@ -43,9 +43,15 @@ namespace SEGUIApp {
 			QMessageBox msgBox;
 			QLabel* connectionLabel = widget->findChild<QLabel*>("connectionLabel");
 
-			if (connectionLabel) msgBox.setText("Connection to " + connectionLabel->text() + " will be closed!");
+			if (connectionLabel) {
+				msgBox.setText(tr("Connection to ") + connectionLabel->text() + tr(" will be closed!"));
+			}
+			else {
+				removeStartTab(index);
+				return;
+			};
 
-			msgBox.setInformativeText("Do you want to continue?");
+			msgBox.setInformativeText(tr("Do you want to continue?"));
 			msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
 			msgBox.setDefaultButton(QMessageBox::Cancel);
 			int ret = msgBox.exec();

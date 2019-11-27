@@ -1,10 +1,11 @@
 #pragma once
 
-#include <QString>
-#include <QWidget>
+#include <QtCore/QString>
+#include <QtWidgets/QWidget>
 
 #include "ui_ConnectionTab.h"
 
+#include "BookDepthModel.h"
 #include "RecentTradesModel.h"
 
 namespace SEGUIApp {
@@ -22,12 +23,20 @@ namespace SEGUIApp {
 		}
 		~ConnectionTab() = default;
 
+		void setBookDepthModel(BookDepthModel* model) {
+			connectionTab_.bookDepthView->setModel(model);
+		}
+
 		void setTabName(const QString& name) {
 			connectionTab_.connectionLabel->setText(name);
 		}
 
 		void setRecentTradesModel(RecentTradesModel* model) {
 			connectionTab_.recentTradesView->setModel(model);
+		}
+
+		void setBookDepthWidget() {
+			//connectionTab_.rTopVLayout->addWidget(widget);
 		}
 	};
 

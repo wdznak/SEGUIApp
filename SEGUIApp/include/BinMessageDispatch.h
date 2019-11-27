@@ -3,8 +3,8 @@
 #include <string>
 #include <vector>
 
-#include <QObject>
-#include <QString>
+#include <QtCore/QObject>
+#include <QtCore/QString>
 
 #include <rapidjson/document.h>
 

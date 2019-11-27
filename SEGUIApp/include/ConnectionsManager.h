@@ -9,13 +9,13 @@
 #include <thread>
 #include <variant>
 
-#include <QDebug>
-#include <QObject>
-#include <QWidget>
+#include <QtCore/QDebug>
+#include <QtCore/QObject>
+#include <QtWidgets/QWidget>
 
 #include <tbb/concurrent_queue.h>
 
-#include <SEConnection.h>
+#include <Connection.h>
 #include <UvFileStream.h>
 
 #include "Broadcaster.h"
@@ -28,7 +28,7 @@ namespace SEGUIApp {
 	{
 		Q_OBJECT
 	public:
-		using connList_t = seservice::SEConnection::connList_t;
+		using connList_t = seservice::Connection::connList_t;
 		
 	private:
 		struct Error {
@@ -50,7 +50,7 @@ namespace SEGUIApp {
 		};
 		
 		tbb::concurrent_queue<Error> errorQueue;
-		seservice::SEConnection connectionService_{ [&](int connectionId, std::string message, seservice::ErrorCode errorCode) {
+		seservice::Connection connectionService_{ [&](int connectionId, std::string message, seservice::ErrorCode errorCode) {
 			errorQueue.push(Error{connectionId, message, errorCode});
 			// TODO: Move errorMessage to errorHandler() and make error signal with no arguments.
 			QString errorMessage = QString("Connection nr. %1 has failed. Error message: %2").arg(connectionId).arg(message.data());

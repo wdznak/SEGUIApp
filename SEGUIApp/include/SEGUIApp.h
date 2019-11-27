@@ -10,10 +10,10 @@
 #include <thread>
 #include <vector>
 
-#include <QDialog>
-#include <QDebug>
+#include <QtWidgets/QDialog>
+#include <QtCore/QDebug>
 
-#include <SEConnection.h>
+#include <Connection.h>
 
 #include "ui_SEGUIApp.h"
 #include "AvailableConnectionsDialog.h"
@@ -32,8 +32,6 @@ namespace SEGUIApp {
 		ConnectionsManager* connectionsManager_;
 		ConnectionsTabManager* connectionsTabManager_;
 		ModelsManager modelsManager_;
-		seservice::SEConnection* seConnection_;
-		QDialog* dialog;
 		std::function<void(int, std::string, seservice::ErrorCode)> err;
 		std::function<void(int, std::string)> msgCb;
 

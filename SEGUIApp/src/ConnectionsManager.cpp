@@ -75,7 +75,7 @@ namespace SEGUIApp {
 	}
 	
 	void ConnectionsManager::connectAll(int fileStreamId) {
-		if (awaitConnectionQueue_.empty()) return;
+		/*if (awaitConnectionQueue_.empty()) return;
 
 		const Connection& connection = awaitConnectionQueue_.front();
 		auto dispatch = dispatch_.createDispatch(connection.exchangeName);
@@ -94,7 +94,8 @@ namespace SEGUIApp {
 
 		emit connectionOpened(connectionId, connection.exchangeName.data(), connection.symbol.data(), models);
 		activeConnectionList_.push_back(ActiveConnection{ connectionId, fileStreamId, models});
-		awaitConnectionQueue_.pop();
+		awaitConnectionQueue_.pop();*/
+		emit connectionOpened(2, "Test", "BTC-TST", nullptr);
 	}
 
 } // namespace SEGUIApp

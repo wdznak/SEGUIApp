@@ -43,18 +43,6 @@
         "depthAddress": "https://www.binance.com/api/v1/depth?symbol=TRXBTC&limit=1000",
         "symbol": "TRX-BTC"
       }
-    ],
-    "BitMex": [
-      {
-        "id": 1,
-        "address": "wss:://mex1test",
-        "description": "conn nr 1"
-      },
-      {
-        "id": 2,
-        "address": "wss:://mex1test",
-        "description": "conn nr 1"
-      }
     ]
   }
 }
