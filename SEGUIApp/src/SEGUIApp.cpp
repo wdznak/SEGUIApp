@@ -16,32 +16,30 @@ namespace SEGUIApp {
 		qRegisterMetaType < std::string >();
 		ui.setupUi(this);
 
-		connectionsTabManager_ = new ConnectionsTabManager();
-		connectionsManager_ = new ConnectionsManager(&modelsManager_);
+		connectionsTabManager_ = std::make_unique<ConnectionsTabManager>();
+		connectionsManager_ = std::make_unique<ConnectionsManager>(&modelsManager_);
 
-		ui.mainVLayout->addWidget(connectionsTabManager_);
+		ui.mainVLayout->addWidget(connectionsTabManager_.get());
 		
-		availableConnections_ = new AvailableConnectionsDialog{ this };
-		availableConnections_->setModelData(connectionsManager_->availableConnections());
+		availableConnDialog_ = std::make_unique<AvailableConnectionsDialog>(this);
+		availableConnDialog_->setModelData(connectionsManager_->availableConnections());
 
-		connect(connectionsManager_, &ConnectionsManager::error, this, &SEGUIApp::postError);
+		connect(connectionsManager_.get(), &ConnectionsManager::error, this, &SEGUIApp::postError);
 		connect(ui.actionOpen, &QAction::triggered, this, &SEGUIApp::openConnectionsListDialog);
-		connect(connectionsManager_, &ConnectionsManager::connectionOpened, connectionsTabManager_, &ConnectionsTabManager::addNewTab);
-		connect(availableConnections_, &AvailableConnectionsDialog::connectionClicked, this, &SEGUIApp::openConnection);
+		connect(connectionsManager_.get(), &ConnectionsManager::connectionOpened, connectionsTabManager_.get(), &ConnectionsTabManager::addNewTab);
+		connect(availableConnDialog_.get(), &AvailableConnectionsDialog::connectionClicked, this, &SEGUIApp::openConnection);
 		connect(ui.outputListView->model(), &QAbstractItemModel::rowsInserted, ui.outputListView, &QListWidget::scrollToBottom);
-		connect(connectionsTabManager_, &ConnectionsTabManager::tabClosed, connectionsManager_, &ConnectionsManager::closeConnection);
+		connect(connectionsTabManager_.get(), &ConnectionsTabManager::tabClosed, connectionsManager_.get(), &ConnectionsManager::closeConnection);
 	}
 
 	SEGUIApp::~SEGUIApp()
 	{
 		delete connectionsTabManager_;
-		delete connectionsManager_;
-		delete availableConnections_;
 	}
 
 	void SEGUIApp::openConnectionsListDialog()
 	{
-		availableConnections_->exec();
+		availableConnDialog_->exec();
 	}
 
 	void SEGUIApp::openConnection(std::string exchangeName, int connectionId, std::string symbol)

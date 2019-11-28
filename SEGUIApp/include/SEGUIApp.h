@@ -5,6 +5,7 @@
 #include <functional>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <thread>
@@ -28,9 +29,9 @@ namespace SEGUIApp {
 		Q_OBJECT
 	private:
 		Ui::SEGUIAppClass ui;
-		AvailableConnectionsDialog* availableConnections_;
-		ConnectionsManager* connectionsManager_;
-		ConnectionsTabManager* connectionsTabManager_;
+		std::unique_ptr<AvailableConnectionsDialog> availableConnDialog_;
+		std::unique_ptr<ConnectionsManager> connectionsManager_;
+		std::unique_ptr<ConnectionsTabManager> connectionsTabManager_;
 		ModelsManager modelsManager_;
 		std::function<void(int, std::string, seservice::ErrorCode)> err;
 		std::function<void(int, std::string)> msgCb;
@@ -38,7 +39,7 @@ namespace SEGUIApp {
 
 	public:
 		SEGUIApp(QWidget *parent = Q_NULLPTR);
-		~SEGUIApp();
+		~SEGUIApp() = default;
 
 	private:
 		void openConnectionsListDialog();

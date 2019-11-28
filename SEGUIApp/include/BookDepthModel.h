@@ -134,33 +134,6 @@ namespace SEGUIApp {
 				}
 			}
 		}
-
-		void updateBids(const std::string& price, const std::string& size) {
-			float fPrice = std::stof(price);
-			float fSize = std::stof(size);
-			auto it = orderBook_.find(fPrice);
-			auto row = std::distance(orderBook_.begin(), it);
-
-			if (fSize == .0f) {
-				if (it != orderBook_.end()) {
-					QAbstractItemModel::beginRemoveRows(QModelIndex(), row, row);
-					orderBook_.erase(it);
-					QAbstractItemModel::endRemoveRows();
-				}
-			}
-			else {
-				if (it != orderBook_.end()) {
-					orderBook_[fPrice] = { fSize, true };
-					QModelIndex index = QAbstractTableModel::index(row, 0);
-					emit dataChanged(index, this->index(row, 2), {});
-				}
-				else {
-					QAbstractItemModel::beginInsertRows(QModelIndex(), row, row);
-					orderBook_[fPrice] = { fSize, true };
-					QAbstractItemModel::endInsertRows();
-				}
-			}
-		}
 	};
 
 } // namespace SEGUIApp
