@@ -17,10 +17,13 @@
 #include <Connection.h>
 
 #include "ui_SEGUIApp.h"
+
 #include "AvailableConnectionsDialog.h"
 #include "ConnectionsManager.h"
 #include "ConnectionsTabManager.h"
+#include "LiveModeWidget.h"
 #include "ModelsManager.h"
+#include "OfflineModeWidget.h"
 
 namespace SEGUIApp {
 
@@ -29,10 +32,15 @@ namespace SEGUIApp {
 		Q_OBJECT
 	private:
 		Ui::SEGUIAppClass ui;
+
 		std::unique_ptr<AvailableConnectionsDialog> availableConnDialog_;
 		std::unique_ptr<ConnectionsManager> connectionsManager_;
 		std::unique_ptr<ConnectionsTabManager> connectionsTabManager_;
+		std::unique_ptr<LiveModeWidget> liveModeWidget_;
+		bool liveMode = true;
 		ModelsManager modelsManager_;
+		std::unique_ptr<OfflineModeWidget> offlineModeWidget_;
+
 		std::function<void(int, std::string, seservice::ErrorCode)> err;
 		std::function<void(int, std::string)> msgCb;
 
@@ -44,10 +52,7 @@ namespace SEGUIApp {
 	private:
 		void openConnectionsListDialog();
 		void openConnection(std::string exchangeName, int connectionId, std::string symbol);
-		void postError(QString message) {
-			QListWidgetItem* errorMessage = new QListWidgetItem(QIcon{ ":/SEGUIApp/Resources/Icons/1x/round-panorama_fish_eye-24px.png" }, message);
-			ui.outputListView->addItem(errorMessage);
-		}
+		void switchMode();
 	};
 
 } // namespace SEGUIApp

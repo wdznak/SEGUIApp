@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <QtCore/QDebug>
+#include <QtCore/QAbstractTableModel>
 #include <QtGlobal>
 #include <QtGui/QBrush>
 #include <QtGui/QColor>
@@ -9,8 +10,6 @@
 #include <map>
 #include <string>
 #include <vector>
-
-#include <QtCore/QAbstractTableModel>
 
 namespace SEGUIApp {
 
@@ -30,8 +29,8 @@ namespace SEGUIApp {
 				: size_(size), isBid_(isBid) {}
 		};
 
-		std::map<float, Order> orderBook_;
 		bool isBookFilled = false;
+		std::map<float, Order> orderBook_;
 		size_t updateId_ = 0;
 
 	public:

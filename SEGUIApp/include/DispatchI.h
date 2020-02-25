@@ -5,6 +5,8 @@
 #include <QtCore/QMetaType>
 #include <QtCore/QObject>
 
+#include "ANamespace.h"
+
 namespace SEGUIApp {
 
 	struct Trade {
@@ -30,9 +32,15 @@ namespace SEGUIApp {
 
 	class DispatchI: public QObject {
 		Q_OBJECT
+	private:
+		Exchange exchange = Exchange::NONE;
 	public:
+
 		virtual ~DispatchI() = default;
 		virtual void dispatch(int connectionId, const std::string& message) = 0;
+		virtual Exchange getExchange() {
+			return exchange;
+		};
 
 	signals:
 		void depthUpdated(const DepthUpdate&);

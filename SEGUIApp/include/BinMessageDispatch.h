@@ -50,12 +50,14 @@ namespace SEGUIApp {
 	class BinMessageDispatch: public DispatchI
 	{
 		Q_OBJECT
-
+	private:
+		Exchange exchange = Exchange::BINANCE;
 	public:
+
 		BinMessageDispatch() = default;
 		~BinMessageDispatch() = default;
 
-		void dispatch(int connectionId, const std::string& message) {
+		void dispatch(int connectionId, const std::string& message) override {
 			rj::Document document_;
 			document_.Parse(message.data());
 
@@ -79,6 +81,10 @@ namespace SEGUIApp {
 			else {
 				// TODO: Handle error.
 			}
+		}
+
+		Exchange getExchange() override {
+			return exchange;
 		}
 
 	private:

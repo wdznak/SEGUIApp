@@ -65,6 +65,12 @@
     <QtMoc Include="include\ModelsManager.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="include\LiveModeWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="include\OfflineModeWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AvailableConnectionsDialog.cpp">
@@ -97,6 +103,9 @@
     <ClCompile Include="src\FileDataParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\FileDataModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Resources\QtUi\AvailableConnections.ui">
@@ -111,7 +120,10 @@
     <QtUic Include="Resources\QtUi\ConnectionTab.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="Resources\QtUi\RecentTradesWidget.ui">
+    <QtUic Include="Resources\QtUi\LiveModeWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="Resources\QtUi\OfflineModeWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -132,6 +144,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\FileDataParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FileDataModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

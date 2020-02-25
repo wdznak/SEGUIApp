@@ -18,23 +18,18 @@ namespace SEGUIApp {
 
 		connectionsTabManager_ = std::make_unique<ConnectionsTabManager>();
 		connectionsManager_ = std::make_unique<ConnectionsManager>(&modelsManager_);
+		liveModeWidget_ = std::make_unique<LiveModeWidget>(connectionsManager_.get());
 
-		ui.mainVLayout->addWidget(connectionsTabManager_.get());
-		
+		//ui.stackedWidget->addWidget(liveModeWidget_.get());
+		offlineModeWidget_ = std::make_unique<OfflineModeWidget>();
+		ui.stackedWidget->addWidget(offlineModeWidget_.get());
+
 		availableConnDialog_ = std::make_unique<AvailableConnectionsDialog>(this);
 		availableConnDialog_->setModelData(connectionsManager_->availableConnections());
-
-		connect(connectionsManager_.get(), &ConnectionsManager::error, this, &SEGUIApp::postError);
-		connect(ui.actionOpen, &QAction::triggered, this, &SEGUIApp::openConnectionsListDialog);
-		connect(connectionsManager_.get(), &ConnectionsManager::connectionOpened, connectionsTabManager_.get(), &ConnectionsTabManager::addNewTab);
+		
+		connect(ui.actionOpen, &QAction::triggered, this, &SEGUIApp::openConnectionsListDialog);	
 		connect(availableConnDialog_.get(), &AvailableConnectionsDialog::connectionClicked, this, &SEGUIApp::openConnection);
-		connect(ui.outputListView->model(), &QAbstractItemModel::rowsInserted, ui.outputListView, &QListWidget::scrollToBottom);
-		connect(connectionsTabManager_.get(), &ConnectionsTabManager::tabClosed, connectionsManager_.get(), &ConnectionsManager::closeConnection);
-	}
-
-	SEGUIApp::~SEGUIApp()
-	{
-		delete connectionsTabManager_;
+		connect(ui.actionMode, &QAction::triggered, this, &SEGUIApp::switchMode);
 	}
 
 	void SEGUIApp::openConnectionsListDialog()
@@ -45,6 +40,24 @@ namespace SEGUIApp {
 	void SEGUIApp::openConnection(std::string exchangeName, int connectionId, std::string symbol)
 	{
 		connectionsManager_->createConnection(exchangeName, connectionId, symbol);
+	}
+
+	void SEGUIApp::switchMode() {
+		if (!offlineModeWidget_) {
+			offlineModeWidget_ = std::make_unique<OfflineModeWidget>();
+			ui.stackedWidget->addWidget(offlineModeWidget_.get());
+			ui.stackedWidget->setCurrentIndex(1);
+			return;
+		}
+
+		if (liveMode) {
+			ui.stackedWidget->setCurrentIndex(1);
+		}
+		else {
+			ui.stackedWidget->setCurrentIndex(0);
+		}
+
+		liveMode = !liveMode;
 	}
 
 } // namespace SEGUIApp

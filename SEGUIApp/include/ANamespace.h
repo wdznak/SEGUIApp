@@ -4,7 +4,8 @@ namespace SEGUIApp {
 
 	enum class Exchange {
 		BINANCE,
-		BITMEX
+		BITMEX,
+		NONE
 	};
 
 }

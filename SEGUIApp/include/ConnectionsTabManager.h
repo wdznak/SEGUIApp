@@ -30,20 +30,23 @@ namespace SEGUIApp {
 		void addNewTab(int uniqueId, const QString& exchangeName, const QString& symbol, const Models* models) {
 
 			/* --------  Delete This!  -------- */
-			BookDepthModel* bdm = new BookDepthModel();
-			FileDataParser* fdp = new FileDataParser(*bdm);
+			//BookDepthModel* bdm = new BookDepthModel();
+			//FileDataParser* fdp = new FileDataParser(*bdm);
 			/* --------       !!!      -------- */
+			if (!models) {
+				// Show error popup
+				return;
+			}
 			
 			ConnectionTab* connectionTab = new ConnectionTab();
 			connectionTab->setProperty("uniqueId", QVariant(uniqueId));
 			connectionTab->setProperty("exchangeName", QVariant(exchangeName));
 			connectionTab->setTabName(exchangeName + " " + symbol);
-			//if (models) connectionTab->setRecentTradesModel(models->recentTrades.get());
-			connectionTab->setBookDepthModel(bdm);
+			connectionTab->setRecentTradesModel(models->recentTrades.get());
 
 			/* ------ Remove this ------ */
-			BookDepthHBC* bd = new BookDepthHBC();
-			connectionTab->setBookDepthWidget();
+			//BookDepthHBC* bd = new BookDepthHBC();
+			//connectionTab->setBookDepthWidget();
 			/* ------     End     ------ */
 
 			int index = connectionsTab_.tabWidget->addTab(connectionTab, symbol);

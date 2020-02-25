@@ -168,6 +168,7 @@
     <ClCompile Include="src\Broadcaster.cpp" />
     <ClCompile Include="src\ConnectionsManager.cpp" />
     <ClCompile Include="src\ConnectionsTabManager.cpp" />
+    <ClCompile Include="src\FileDataModel.cpp" />
     <ClCompile Include="src\FileDataParser.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\RecentTradesModel.cpp" />
@@ -177,7 +178,8 @@
     <QtUic Include="Resources\QtUi\AvailableConnections.ui" />
     <QtUic Include="Resources\QtUi\ConnectionsTabWidget.ui" />
     <QtUic Include="Resources\QtUi\ConnectionTab.ui" />
-    <QtUic Include="Resources\QtUi\RecentTradesWidget.ui" />
+    <QtUic Include="Resources\QtUi\LiveModeWidget.ui" />
+    <QtUic Include="Resources\QtUi\OfflineModeWidget.ui" />
     <QtUic Include="Resources\QtUi\SEGUIApp.ui" />
   </ItemGroup>
   <ItemGroup>
@@ -189,9 +191,12 @@
     <QtMoc Include="include\BookDepthHBC.h" />
     <ClInclude Include="include\BookDepthModel.h" />
     <ClInclude Include="include\ConnectionTab.h" />
+    <ClInclude Include="include\FileDataModel.h" />
     <ClInclude Include="include\FileDataParser.h" />
+    <QtMoc Include="include\LiveModeWidget.h" />
     <ClInclude Include="include\MessageDispatch.h" />
     <QtMoc Include="include\ModelsManager.h" />
+    <QtMoc Include="include\OfflineModeWidget.h" />
     <ClInclude Include="include\RecentTradesModel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

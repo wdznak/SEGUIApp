@@ -7,6 +7,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QDebug>
 
+#include "ANamespace.h"
 #include "DispatchI.h"
 #include "RecentTradesModel.h"
 
@@ -31,7 +32,7 @@ namespace SEGUIApp {
 		ModelsManager() = default;
 		~ModelsManager() = default;
 
-		Models* createModels() {
+		Models* createModels(Exchange exchange) {
 			auto models = std::make_unique<Models>();
 			models->recentTrades = std::make_unique<RecentTradesModel>();
 			modelList_.push_back(std::move(models));

@@ -75,16 +75,24 @@ namespace SEGUIApp {
 	}
 	
 	void ConnectionsManager::connectAll(int fileStreamId) {
-		/*if (awaitConnectionQueue_.empty()) return;
+		if (awaitConnectionQueue_.empty()) return;
 
 		const Connection& connection = awaitConnectionQueue_.front();
 		auto dispatch = dispatch_.createDispatch(connection.exchangeName);
 
-		if (!dispatch) return;
+		if (!dispatch) {
+			awaitConnectionQueue_.pop();
+			return;
+		}
 
-		Models* models = modelsManager_->createModels();
+		Models* models = modelsManager_->createModels(dispatch->getExchange());
+
 		if (models) {
-			QObject::connect(dispatch.get(), &DispatchI::tradeCreated, models, &Models::onNewTrade);
+			switch (dispatch->getExchange()) {
+			case Exchange::BINANCE : 
+				QObject::connect(dispatch.get(), &DispatchI::tradeCreated, models, &Models::onNewTrade);
+				break;
+			}
 		}
 		
 		int connectionId = connectionService_.connect(connection.exchangeName, connection.id, [&, dispatch{ dispatch }, fileStreamId](int connectionId, std::string message) {
@@ -94,8 +102,7 @@ namespace SEGUIApp {
 
 		emit connectionOpened(connectionId, connection.exchangeName.data(), connection.symbol.data(), models);
 		activeConnectionList_.push_back(ActiveConnection{ connectionId, fileStreamId, models});
-		awaitConnectionQueue_.pop();*/
-		emit connectionOpened(2, "Test", "BTC-TST", nullptr);
+		awaitConnectionQueue_.pop();
 	}
 
 } // namespace SEGUIApp
