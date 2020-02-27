@@ -87,7 +87,7 @@ namespace SEGUIApp {
 		}
 
 		void updateView() {
-			QAbstractTableModel::beginInsertRows(QModelIndex(), 0, fileList_.size());
+			QAbstractTableModel::beginInsertRows(QModelIndex(), 0, fileList_.size() - 1);
 			QAbstractTableModel::endInsertRows();
 		}
 

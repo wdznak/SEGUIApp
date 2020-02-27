@@ -13,22 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="spacing">
-    <number>0</number>
-   </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QHBoxLayout" name="topHLayout">
      <item>
@@ -58,8 +43,25 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="centerHLayout">
-     <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <layout class="QVBoxLayout" name="depthLayout">
+       <item>
+        <widget class="QTableView" name="depthTable"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="readNext">
+         <property name="text">
+          <string>Read Next</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="">
       <layout class="QVBoxLayout" name="fileListLayout">
        <item>
         <widget class="QTableView" name="fileTable"/>
@@ -72,8 +74,8 @@
         </widget>
        </item>
       </layout>
-     </item>
-    </layout>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>
