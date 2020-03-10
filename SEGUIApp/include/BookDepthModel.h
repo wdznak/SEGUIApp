@@ -11,6 +11,8 @@
 #include <string>
 #include <vector>
 
+#include "ANamespace.h"
+
 namespace SEGUIApp {
 
 	class BookDepthModel : public QAbstractTableModel
@@ -20,17 +22,23 @@ namespace SEGUIApp {
 
 	private:
 		struct Order {
-			long size_;
+			_int64 size_ = 0;
 			bool isBid_ = false;
 
 			Order() = default;
 
-			Order(long size, bool isBid)
+			Order(_int64 size, bool isBid)
 				: size_(size), isBid_(isBid) {}
 		};
 
+		struct CompareStringFloat {
+			bool operator()(const std::string& a, const std::string& b) const {
+				return static_cast<_int64>(100000000 * std::stod(a)) < static_cast<_int64>(100000000 * std::stod(b));
+			}
+		};
+
 		bool isBookFilled = false;
-		std::map<std::string, Order> orderBook_;
+		std::map<std::string, Order, CompareStringFloat> orderBook_;
 		size_t updateId_ = 0;
 
 	public:
@@ -92,16 +100,20 @@ namespace SEGUIApp {
 
 		void fillBook(const size_t updateId, const baList_t& bids, const baList_t& asks) {
 			std::for_each(bids.begin(), bids.end(), [&orderBook_ = orderBook_](const std::vector<std::string>& bid) {
-				orderBook_.emplace(bid[0], Order{ static_cast<long>(100000000 * std::stod(bid[1])), true });
+				orderBook_.emplace(bid[0], Order{ static_cast<_int64>(100000000 * std::stod(bid[1])), true });
 			});
 
 			std::for_each(asks.begin(), asks.end(), [&orderBook_ = orderBook_](const std::vector<std::string>& ask) {
-				orderBook_.emplace(ask[0], Order{ static_cast<long>(100000000 * std::stod(ask[1])), false });
+				orderBook_.emplace(ask[0], Order{ static_cast<_int64>(100000000 * std::stod(ask[1])), false });
 			});
 
 			isBookFilled = true;
 			QAbstractTableModel::beginInsertRows(QModelIndex(), 0, orderBook_.size() - 1);
 			QAbstractTableModel::endInsertRows();
+		}
+
+		void getSnapshot(size_t windowsSize) const {
+
 		}
 
 		int rowCount(const QModelIndex& parent = QModelIndex()) const override {
@@ -110,7 +122,8 @@ namespace SEGUIApp {
 		}
 		
 		void updateBidAsk(bool isBid, const std::string& price, const std::string& size) {
-			long fSize = static_cast<long>(100000000 * std::stod(size));
+			_int64 fSize = static_cast<_int64>(100000000 * std::stod(size));
+			
 			auto it = orderBook_.find(price);
 			auto row = std::distance(orderBook_.begin(), it);
 
