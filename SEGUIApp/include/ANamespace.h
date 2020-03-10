@@ -8,4 +8,7 @@ namespace SEGUIApp {
 		NONE
 	};
 
+	struct DepthUpdate {
+	};
+
 }

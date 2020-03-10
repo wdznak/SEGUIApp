@@ -163,11 +163,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AvailableConnectionsDialog.cpp" />
-    <ClCompile Include="src\BookDepthHBC.cpp" />
+    <ClCompile Include="src\BinKline.cpp" />
     <ClCompile Include="src\BookDepthModel.cpp" />
     <ClCompile Include="src\Broadcaster.cpp" />
     <ClCompile Include="src\ConnectionsManager.cpp" />
     <ClCompile Include="src\ConnectionsTabManager.cpp" />
+    <ClCompile Include="src\DataAggregator.cpp" />
     <ClCompile Include="src\FileDataModel.cpp" />
     <ClCompile Include="src\FileDataParser.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -188,11 +189,12 @@
     <ClInclude Include="include\ANamespace.h" />
     <QtMoc Include="include\DispatchI.h">
     </QtMoc>
-    <QtMoc Include="include\BookDepthHBC.h" />
+    <ClInclude Include="include\BinKline.h" />
     <ClInclude Include="include\BookDepthModel.h" />
     <ClInclude Include="include\ConnectionTab.h" />
+    <ClInclude Include="include\DataAggregator.h" />
     <ClInclude Include="include\FileDataModel.h" />
-    <ClInclude Include="include\FileDataParser.h" />
+    <QtMoc Include="include\FileDataParser.h" />
     <QtMoc Include="include\LiveModeWidget.h" />
     <ClInclude Include="include\MessageDispatch.h" />
     <QtMoc Include="include\ModelsManager.h" />

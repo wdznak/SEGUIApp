@@ -9,6 +9,7 @@
 #include "ui_OfflineModeWidget.h"
 
 #include "BookDepthModel.h"
+#include "DataAggregator.h"
 #include "FileDataModel.h"
 #include "FileDataParser.h"
 
@@ -21,6 +22,7 @@ namespace SEGUIApp {
 		Ui::OfflineModeWidget offlineMode_;
 
 		BookDepthModel bookDepthModel_;
+		DataAggregator dataAggregator_{ bookDepthModel_, 15 };
 		FileDataModel fileDataModel_;
 		FileDataParser fileDataParser_{ bookDepthModel_ };
 
@@ -30,10 +32,15 @@ namespace SEGUIApp {
 			offlineMode_.dateTimeEdit->setDateTime(QDateTime::currentDateTime());
 			offlineMode_.fileTable->setModel(&fileDataModel_);
 			
-			fileDataParser_.openFile("D:\\Binance BTC-USDT\\2019-05-10_211059_Binance_USDT-BTC_INIT.txt");
+			if (fileDataParser_.initBook("D:\\Binance BTC-USDT\\2019-05-10_211059_Binance_USDT-BTC_INIT.txt")) {
+				dataAggregator_.init(fileDataParser_.getStartTime());
+			};
+
+			while (fileDataParser_.hasNext()) {
+				fileDataParser_.next();
+			}
+
 			offlineMode_.depthTable->setModel(&bookDepthModel_);
-			qDebug() << QDateTime::currentMSecsSinceEpoch();
-			qDebug() << QDateTime::fromMSecsSinceEpoch(1557522661553);
 
 			connect(offlineMode_.selectFolderB, &QPushButton::clicked, this, &OfflineModeWidget::openFileDialog);
 			connect(offlineMode_.readNext, &QPushButton::clicked, this, &OfflineModeWidget::readNext);

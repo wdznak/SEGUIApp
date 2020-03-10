@@ -4,7 +4,6 @@
 
 #include <string>
 
-#include "BookDepthHBC.h"
 #include "ConnectionTab.h"
 #include "ModelsManager.h"
 #include "ui_ConnectionsTabWidget.h"

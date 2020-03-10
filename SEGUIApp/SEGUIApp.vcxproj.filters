@@ -59,9 +59,6 @@
     <QtMoc Include="include\DispatchI.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="include\BookDepthHBC.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="include\ModelsManager.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -69,6 +66,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="include\OfflineModeWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="include\FileDataParser.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -94,9 +94,6 @@
     <ClCompile Include="src\RecentTradesModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\BookDepthHBC.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\BookDepthModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -104,6 +101,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\FileDataModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BinKline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DataAggregator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -143,10 +146,13 @@
     <ClInclude Include="include\BookDepthModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\FileDataParser.h">
+    <ClInclude Include="include\FileDataModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\FileDataModel.h">
+    <ClInclude Include="include\BinKline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DataAggregator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
