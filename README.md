@@ -10,7 +10,8 @@ It requires *[SEFile](https://github.com/wdznak/SEFile)*, *[SESerivce](https://g
 
 The main goal of this project is to test different approaches to design an app and improve my multithreading knowledge. In future releases, I'm going to implement a python module that will use gathered data to feed machine learning models.
 
-Currently, the app is running on a Microsoft Azure virtual machine from 10/05/19 without any issues (day of the commit 30/05/19). 
+Currently, the app is running on a Microsoft Azure virtual machine from 10/05/19 without any issues (day of the commit 30/05/19).
+Edit 10/03/20. App is still up and have gathered over 200GB of data.
 ![](../assets/app.png)
 
 
