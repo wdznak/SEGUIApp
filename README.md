@@ -1,6 +1,9 @@
 ## SEGUIApp
 
-**SEGUIApp** is an app for gathering data from stock exchanges, saving it to files and present a live view to the user. It requires *[SEFile](https://github.com/wdznak/SEFile)*, *[SESerivce](https://github.com/wdznak/SEService)* and *[Qt5](https://www.qt.io/)* to compile. GUI is based on Qt widget system.  
+**SEGUIApp** is an app for gathering data from stock exchanges, saving it to files and present a live view to the user. It also provides tools for modeling data that can be exported to CSV files and used to train machine learning models.
+
+
+It requires *[SEFile](https://github.com/wdznak/SEFile)*, *[SESerivce](https://github.com/wdznak/SEService)* and *[Qt5](https://www.qt.io/)* to compile. GUI is based on Qt widget system.  
 
 
 
