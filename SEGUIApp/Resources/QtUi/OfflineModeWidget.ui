@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>904</width>
+    <width>831</width>
     <height>733</height>
    </rect>
   </property>
@@ -17,7 +17,23 @@
    <item>
     <layout class="QHBoxLayout" name="topHLayout">
      <item>
-      <widget class="QDateTimeEdit" name="dateTimeEdit">
+      <widget class="QLabel" name="fromLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>From</string>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDateTimeEdit" name="dateTimeFrom">
        <property name="time">
         <time>
          <hour>0</hour>
@@ -34,7 +50,49 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="Filter">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="toLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>To</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDateTimeEdit" name="dateTimeTo"/>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="filterB">
        <property name="text">
         <string>Filter</string>
        </property>
@@ -43,33 +101,55 @@
     </layout>
    </item>
    <item>
-    <widget class="QSplitter" name="splitter">
+    <widget class="QSplitter" name="splitter_2">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QWidget" name="verticalLayoutWidget">
-      <layout class="QVBoxLayout" name="depthLayout">
-       <item>
-        <widget class="QTableView" name="depthTable"/>
-       </item>
-       <item>
-        <widget class="QPushButton" name="readNext">
-         <property name="text">
-          <string>Read Next</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+     <property name="handleWidth">
+      <number>5</number>
+     </property>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QWidget" name="verticalLayoutWidget">
+       <layout class="QVBoxLayout" name="depthLayout">
+        <item>
+         <widget class="QTableView" name="depthTable"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="readNext">
+          <property name="text">
+           <string>Read Next</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="layoutWidget">
+       <layout class="QVBoxLayout" name="fileListLayout">
+        <item>
+         <widget class="QTableView" name="fileTable"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="selectFolderB">
+          <property name="text">
+           <string>Select Folder</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
-     <widget class="QWidget" name="">
-      <layout class="QVBoxLayout" name="fileListLayout">
+     <widget class="QWidget" name="verticalLayoutWidget_2">
+      <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QTableView" name="fileTable"/>
-       </item>
-       <item>
-        <widget class="QPushButton" name="selectFolderB">
-         <property name="text">
-          <string>Select Folder</string>
+        <widget class="QListWidget" name="messageList">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
         </widget>
        </item>

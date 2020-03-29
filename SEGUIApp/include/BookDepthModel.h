@@ -18,9 +18,6 @@ namespace SEGUIApp {
 	class BookDepthModel : public QAbstractTableModel
 	{
 	public:
-		using baList_t = std::vector<std::vector<std::string>>;
-
-	private:
 		struct Order {
 			_int64 size_ = 0;
 			bool isBid_ = false;
@@ -37,9 +34,14 @@ namespace SEGUIApp {
 			}
 		};
 
+		using baList_t = std::vector<std::vector<std::string>>;
+		using orderBook_t = std::map<std::string, struct Order, CompareStringFloat>;
+
+	private:
 		bool isBookFilled = false;
-		std::map<std::string, Order, CompareStringFloat> orderBook_;
-		size_t updateId_ = 0;
+		orderBook_t orderBook_;
+		_int64 firstUpdateID_ = 0;
+		_int64 lastUpdateID_ = 0;
 
 	public:
 		BookDepthModel() {}
@@ -99,6 +101,7 @@ namespace SEGUIApp {
 		}
 
 		void fillBook(const size_t updateId, const baList_t& bids, const baList_t& asks) {
+			lastUpdateID_ = updateId;
 			std::for_each(bids.begin(), bids.end(), [&orderBook_ = orderBook_](const std::vector<std::string>& bid) {
 				orderBook_.emplace(bid[0], Order{ static_cast<_int64>(100000000 * std::stod(bid[1])), true });
 			});
@@ -112,8 +115,12 @@ namespace SEGUIApp {
 			QAbstractTableModel::endInsertRows();
 		}
 
-		void getSnapshot(size_t windowsSize) const {
+		_int64 getLastUpdateID() const {
+			return lastUpdateID_;
+		}
 
+		orderBook_t getSnapshot() const {
+			return orderBook_;
 		}
 
 		int rowCount(const QModelIndex& parent = QModelIndex()) const override {
@@ -121,7 +128,9 @@ namespace SEGUIApp {
 			return orderBook_.size();
 		}
 		
-		void updateBidAsk(bool isBid, const std::string& price, const std::string& size) {
+		void updateBidAsk(bool isBid, const std::string& price, const std::string& size, _int64 firstUpdateID, _int64 lastUpdateID) {
+			firstUpdateID_ = firstUpdateID;
+			lastUpdateID_ = lastUpdateID;
 			_int64 fSize = static_cast<_int64>(100000000 * std::stod(size));
 			
 			auto it = orderBook_.find(price);

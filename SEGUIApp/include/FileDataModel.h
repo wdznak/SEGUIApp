@@ -48,48 +48,15 @@ namespace SEGUIApp {
 
 		void addFile(const QFileInfo& qFileInfo);
 
-		QVariant data(const QModelIndex& index, int role) const override { 
-			if (role == Qt::DisplayRole) {
-				if (index.row() > fileList_.size())
-					return QVariant{};
+		QModelIndex createIndex(int row, int column);
 
-				auto it = fileList_.begin();
-				std::advance(it, index.row());
+		QVariant data(const QModelIndex& index, int role) const override;
 
-				switch (index.column()) {
-				case 0: return it->isInit ? "INIT" : "";
-				case 1: return it->name;
-				case 2: return it->dateTime;
-				default: return QVariant{};
-				}
-			}
-			return QVariant(); 
-		}
+		QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
-		QVariant headerData(int section, Qt::Orientation orientation, int role) const override {
-			if (role != Qt::DisplayRole)
-				return QVariant();
+		int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
-			if (orientation == Qt::Horizontal) {
-				switch (section) {
-				case 0: return tr("Initial");
-				case 1: return tr("File Name");
-				case 2: return tr("Date");
-				default: return QVariant();
-				}
-			}
-			return QVariant();
-		}
-
-		int rowCount(const QModelIndex& parent = QModelIndex()) const override {
-			Q_UNUSED(parent);
-			return fileList_.size();
-		}
-
-		void updateView() {
-			QAbstractTableModel::beginInsertRows(QModelIndex(), 0, fileList_.size() - 1);
-			QAbstractTableModel::endInsertRows();
-		}
+		void updateView();
 
 	private:
 		bool parseFileName(const QFileInfo& qFileInfo, FileInfo& fileInfo);

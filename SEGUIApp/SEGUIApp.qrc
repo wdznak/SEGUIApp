@@ -3,5 +3,8 @@
         <file>Resources/Icons/1x/round-lens-24px.png</file>
         <file>Resources/Icons/1x/round-panorama_fish_eye-24px.png</file>
         <file>Resources/Icons/1x/round-tonality-24px.png</file>
+        <file>Resources/Icons/1x/error_round.png</file>
+        <file>Resources/Icons/1x/info_round.png</file>
+        <file>Resources/Icons/1x/warning_round.png</file>
     </qresource>
 </RCC>

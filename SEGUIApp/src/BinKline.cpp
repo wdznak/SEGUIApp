@@ -28,6 +28,8 @@ namespace SEGUIApp {
 				// load data to vector();
 			}
 		}
+
+		return false;
 	}
 
 	QString BinKline::getKline(long startTime, long endTime, int limit) {
@@ -41,6 +43,7 @@ namespace SEGUIApp {
 			QString::number(limit_));
 
 		//auto response = cpr::Get(cpr::Url(""), cpr::VerifySsl(false));
+		return QString();
 	}
 
 	bool BinKline::updateFile(const QString& fileName) {
@@ -60,6 +63,7 @@ namespace SEGUIApp {
 		else {
 			//get newest timestamp and strat geting data till current time
 		}
+		return false;
 	}
 
 } // namespace SEGUIApp

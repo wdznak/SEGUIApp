@@ -162,7 +162,9 @@
     <QtMoc Include="include\ConnectionsTabManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\OfflineModeWidget.cpp" />
     <ClCompile Include="src\AvailableConnectionsDialog.cpp" />
+    <ClCompile Include="src\BasicStatistics.cpp" />
     <ClCompile Include="src\BinKline.cpp" />
     <ClCompile Include="src\BookDepthModel.cpp" />
     <ClCompile Include="src\Broadcaster.cpp" />
@@ -184,15 +186,19 @@
     <QtUic Include="Resources\QtUi\SEGUIApp.ui" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\BasicStatistics.h" />
+    <ClInclude Include="include\StatisticsI.h" />
+    <ClInclude Include="include\TradeStatsI.h" />
     <QtMoc Include="include\BinMessageDispatch.h">
     </QtMoc>
     <ClInclude Include="include\ANamespace.h" />
     <QtMoc Include="include\DispatchI.h">
     </QtMoc>
+    <ClInclude Include="include\BasicTradeStats.h" />
     <ClInclude Include="include\BinKline.h" />
     <ClInclude Include="include\BookDepthModel.h" />
     <ClInclude Include="include\ConnectionTab.h" />
-    <ClInclude Include="include\DataAggregator.h" />
+    <QtMoc Include="include\DataAggregator.h" />
     <ClInclude Include="include\FileDataModel.h" />
     <QtMoc Include="include\FileDataParser.h" />
     <QtMoc Include="include\LiveModeWidget.h" />

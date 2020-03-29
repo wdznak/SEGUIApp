@@ -12,6 +12,54 @@ namespace SEGUIApp {
 		}
 	}
 
+	QModelIndex FileDataModel::createIndex(int row, int column) {
+		return QAbstractTableModel::createIndex(row, column);
+	}
+
+	QVariant FileDataModel::data(const QModelIndex& index, int role) const {
+		if (role == Qt::DisplayRole) {
+			if (index.row() > fileList_.size())
+				return QVariant{};
+
+			auto it = fileList_.begin();
+			std::advance(it, index.row());
+
+			switch (index.column()) {
+			case 0: return it->isInit ? "INIT" : "";
+			case 1: return it->name;
+			case 2: return it->dateTime;
+			case 3: return it->path;
+			default: return QVariant{};
+			}
+		}
+		return QVariant();
+	}
+
+	QVariant FileDataModel::headerData(int section, Qt::Orientation orientation, int role) const {
+		if (role != Qt::DisplayRole)
+			return QVariant();
+
+		if (orientation == Qt::Horizontal) {
+			switch (section) {
+			case 0: return tr("Initial");
+			case 1: return tr("File Name");
+			case 2: return tr("Date");
+			default: return QVariant();
+			}
+		}
+		return QVariant();
+	}
+
+	int FileDataModel::rowCount(const QModelIndex& parent) const {
+		Q_UNUSED(parent);
+		return fileList_.size();
+	}
+
+	void FileDataModel::updateView() {
+		QAbstractTableModel::beginInsertRows(QModelIndex(), 0, fileList_.size() - 1);
+		QAbstractTableModel::endInsertRows();
+	}
+
 	bool FileDataModel::parseFileName(const QFileInfo& qFileInfo, FileInfo& fileInfo) {
 		QString s = qFileInfo.fileName();
 		QRegularExpressionMatch match = regex_.match(qFileInfo.fileName());

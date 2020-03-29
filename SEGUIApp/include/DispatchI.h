@@ -16,20 +16,6 @@ namespace SEGUIApp {
 		QString isBuy;
 	};
 
-	struct Depth {
-		Depth(QString p, QString s) : priceLvl(std::move(p)), size(std::move(s)) {}
-		QString priceLvl;
-		QString size;
-	};
-
-	struct DepthUpdate {
-		std::vector<Depth> asks;
-		std::vector<Depth> bids;
-		size_t firstUpdateId = 0;
-		size_t finalUpdateId = 0;
-		size_t time = 0;
-	};
-
 	class DispatchI: public QObject {
 		Q_OBJECT
 	private:

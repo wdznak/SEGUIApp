@@ -102,9 +102,9 @@ namespace SEGUIApp {
 			} 
 			else if ("depthUpdate" == streamName) {
 				DepthUpdate depthData;
-				depthData.firstUpdateId = GetUint64(data, "U");
-				depthData.finalUpdateId = GetUint64(data, "u");
-				depthData.time		    = GetUint64(data, "E");
+				depthData.firstUpdateID = GetUint64(data, "U");
+				depthData.lastUpdateID  = GetUint64(data, "u");
+				depthData.eventTime		= GetUint64(data, "E");
 				depthData.asks			= getDepthArray(data, "a");
 				depthData.bids			= getDepthArray(data, "b");
 				emit depthUpdated(depthData);
@@ -112,8 +112,8 @@ namespace SEGUIApp {
 		}
 
 		template <typename T>
-		std::vector<Depth> getDepthArray(T&& data, const char* value) {
-			std::vector<Depth> result;
+		std::vector<BidAsk> getDepthArray(T&& data, const char* value) {
+			std::vector<BidAsk> result;
 			auto it = data.FindMember(value);
 			
 			if (it != data.MemberEnd() && it->value.IsArray() && !it->value.Empty()) {

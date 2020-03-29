@@ -71,6 +71,9 @@
     <QtMoc Include="include\FileDataParser.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="include\DataAggregator.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AvailableConnectionsDialog.cpp">
@@ -107,6 +110,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\DataAggregator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BasicStatistics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\OfflineModeWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -152,7 +161,16 @@
     <ClInclude Include="include\BinKline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\DataAggregator.h">
+    <ClInclude Include="include\BasicTradeStats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TradeStatsI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\StatisticsI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BasicStatistics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
