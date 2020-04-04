@@ -1,11 +1,16 @@
 #include "OfflineModeWidget.h"
 
-void SEGUIApp::OfflineModeWidget::initBook(const QString& path) {
+void SEGUIApp::OfflineModeWidget::initBook(const QString& path, bool isInit) {
+	if (from_ > to_) {
+		postMessage("Invalid time range!", Message::M_ERROR);
+		return;
+	}
+
 	QString infoMessage("Initiating with: ");
 	infoMessage += path;
 	postMessage(infoMessage, Message::M_INFO);
-
-	if (fileDataParser_.initBook(path, from_, to_)) {
+	// !!! CHANGE false to isInit !!!
+	if (fileDataParser_.initBook(path, false, from_, to_)) {
 		dataAggregator_.init(QDateTime::fromMSecsSinceEpoch(std::max(from_, fileDataParser_.getStartTime())));
 	}
 	else {

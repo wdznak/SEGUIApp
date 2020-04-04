@@ -23,11 +23,14 @@ namespace SEGUIApp {
 	
 	struct comp {
 		bool operator()(const std::pair<_int64, UserData>& a, const std::pair<_int64, UserData>& b) const {
-			return a.second.totalAmount < b.second.totalAmount;
+			return a.second.totalAmount > b.second.totalAmount;
 		}
 	};
 
 	class BasicTradeStats : public TradeStatsI {
+	public:
+		std::unordered_map<_int64, UserData> biggestFish_;
+		_int64 lastUpdateTimestamp_;
 	private:
 		bool isUp_ = true;
 		double refPrice_ = 0;
@@ -35,13 +38,13 @@ namespace SEGUIApp {
 		size_t priceUp_ = 0;
 		size_t totalTransactions_ = 0;
 		double volume_ = 0;
-		std::unordered_map<_int64, UserData> biggestFish_;
 	public:
 		BasicTradeStats() = default;
 		BasicTradeStats(QString refPrice)
 		: refPrice_(refPrice.toDouble()) {}
 
 		void trade(const TradeUpdate& trade) override {
+			lastUpdateTimestamp_ = trade.eventTime;
 			double price = trade.price.toDouble();
 			double quantity = trade.quantity.toDouble();
 
@@ -86,28 +89,36 @@ namespace SEGUIApp {
 			std::sort(elems.begin(), elems.end(), comp());
 
 			int c = 0;
+			int users = 5;
+			double buySum = 0;
+			double sellSum = 0;
 
-			for (auto it = elems.begin(); it != elems.end() && c < 5; ++it, ++c) {
+			for (auto it = elems.begin(); it != elems.end() && c < users; ++it, ++c) {
+				buySum += it->second.totalAmount;
 				qDebug() << "ID: " << it->first << "\n"
-					<< " | TOTAL: " << it->second.totalTrans << "\n"
-					<< " | SIZE:  " << it->second.totalAmount << "\n"
-					<< " | TOTAL: " << it->second.buyTrans << "\n"
-					<< " | BUY:   " << it->second.buyAmount << "\n"
-					<< " | TOTAL: " << it->second.sellTrans << "\n"
-					<< " | SELL:  " << it->second.sellAmount;
+					<< " | Total transactions:     " << it->second.totalTrans << "\n"
+					<< " | Total amount in pocket: " << it->second.totalAmount << "\n"
+					<< " | Total buys:             " << it->second.buyTrans << "\n"
+					<< " | Buy amount:             " << it->second.buyAmount << "\n"
+					<< " | Total sells:            " << it->second.sellTrans << "\n"
+					<< " | Sell amount:            " << it->second.sellAmount;
 			}
 
 			c = 0;
 
-			for (auto it = elems.rbegin(); it != elems.rend() && c < 5; ++it, ++c) {
+			for (auto it = elems.rbegin(); it != elems.rend() && c < users; ++it, ++c) {
+				sellSum += it->second.totalAmount;
 				qDebug() << "ID: " << it->first << "\n"
-					<< " | TOTAL: " << it->second.totalTrans << "\n"
-					<< " | SIZE:  " << it->second.totalAmount << "\n"
-					<< " | TOTAL: " << it->second.buyTrans << "\n"
-					<< " | BUY:   " << it->second.buyAmount << "\n"
-					<< " | TOTAL: " << it->second.sellTrans << "\n"
-					<< " | SELL:  " << it->second.sellAmount;
+					<< " | Total transactions:     " << it->second.totalTrans << "\n"
+					<< " | Total amount in pocket: " << it->second.totalAmount << "\n"
+					<< " | Total buys:             " << it->second.buyTrans << "\n"
+					<< " | Buy amount:             " << it->second.buyAmount << "\n"
+					<< " | Total sells:            " << it->second.sellTrans << "\n"
+					<< " | Sell amount:            " << it->second.sellAmount;
 			}
+
+			qDebug() << "Total buyed: " << buySum << "\n"
+				<< "Total selled: " << sellSum;
 		}
 	};
 

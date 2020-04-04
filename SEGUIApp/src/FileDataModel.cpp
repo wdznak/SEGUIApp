@@ -1,6 +1,8 @@
 #include "FileDataModel.h"
 #include "..\include\FileDataModel.h"
 
+#include <QtCore/QDebug>
+
 namespace SEGUIApp {
 
 	void FileDataModel::addFile(const QFileInfo& qFileInfo) {
@@ -65,16 +67,20 @@ namespace SEGUIApp {
 		QRegularExpressionMatch match = regex_.match(qFileInfo.fileName());
 
 		if (match.hasMatch()) {
-			int h, m, s;
+			int h, m, s, y, mo, d;
 			h = match.captured(4).mid(0, 2).toInt();
 			m = match.captured(4).mid(2, 2).toInt();
 			s = match.captured(4).mid(4, 2).toInt();
+			
+			y = match.captured(1).toInt();
+			mo = match.captured(2).toInt();
+			d = match.captured(3).toInt();
 
-			fileInfo.dateTime.setDate(QDate(match.captured(1).toInt(), match.captured(2).toInt(), match.captured(3).toInt()));
+			fileInfo.dateTime.setDate(QDate(y, mo, d));
 			fileInfo.dateTime.setTime(QTime(h, m, s));
 			fileInfo.exchangeName = match.captured(5);
 			fileInfo.pair = match.captured(6);
-
+			
 			if (match.captured(7) == "_INIT") {
 				fileInfo.isInit = true;
 			}

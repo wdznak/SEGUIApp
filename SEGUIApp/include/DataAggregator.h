@@ -38,17 +38,20 @@ namespace SEGUIApp {
 		 */
 		void init(QDateTime timeStamp) {
 			QTime time = timeStamp.time();
+			qDebug() << timeStamp;
 
-			if (time.minute() % interval_ == 0 && time.second() > 0) {
-				time = time.addSecs(interval_ * 60);
-			}
-			else {
-				int diff = abs(time.minute() - 60) % interval_;
-				time = time.addSecs(diff * 60);
-			}
-			
-			if (time.hour() == 0) {
-				timeStamp = timeStamp.addDays(1);
+			if (!time.minute() % interval_ == 0 && !time.second() == 0) {
+				if (time.minute() % interval_ == 0 && time.second() > 0) {
+					time = time.addSecs(interval_ * 60);
+				}
+				else {
+					int diff = abs(time.minute() - 60) % interval_;
+					time = time.addSecs(diff * 60);
+				}
+
+				if (time.hour() == 0) {
+					timeStamp = timeStamp.addDays(1);
+				}
 			}
 
 			time.setHMS(time.hour(), time.minute(), 0);
@@ -56,7 +59,8 @@ namespace SEGUIApp {
 			
 			startTimeStamp_ = timeStamp.toMSecsSinceEpoch();
 			endTimeStamp_ = timeStamp.addSecs(interval_ * 60).toMSecsSinceEpoch();
-			
+			qDebug() << QDateTime::fromMSecsSinceEpoch(startTimeStamp_);
+			qDebug() << QDateTime::fromMSecsSinceEpoch(endTimeStamp_);
 			statistics_->startInterval(startTimeStamp_);
 			// init depth in statistics if necessery
 		}
@@ -89,7 +93,7 @@ namespace SEGUIApp {
 
 		void onTrade(const TradeUpdate& trade) {
 			static uint count = 0;
-
+			
 			if (trade.eventTime < startTimeStamp_) {
 				return;
 			}

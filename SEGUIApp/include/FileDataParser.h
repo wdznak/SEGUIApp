@@ -23,6 +23,7 @@ namespace SEGUIApp {
 		rj::Document document_;
 		_int64 from_ = 0;
 		bool hasNext_ = false;
+		bool updateBook_ = true;
 		_int64 lastUpdateID_ = 0;
 		BookDepthModel& model_;
 		_int64 startTime_ = -1;
@@ -45,7 +46,8 @@ namespace SEGUIApp {
 			return hasNext_;
 		}
 
-		bool initBook(const QString& fileName, _int64 from = 0, _int64 to = 0) {
+		bool initBook(const QString& fileName, bool isInit, _int64 from = 0, _int64 to = 0) {
+			updateBook_ = isInit;
 			from_ = from;
 			to_ = to;
 			qDebug() << "FROM: " << QDateTime::fromMSecsSinceEpoch(from);
@@ -57,6 +59,8 @@ namespace SEGUIApp {
 				hasNext_ = false;
 				return false;
 			}
+
+			if (!updateBook_) return true;
 			
 			if (hasNext_ = static_cast<bool>(stream_.getline(&buffer[0], BUFF_SIZE, '\r\n'))) {
 				document_.Parse(&buffer[0]);
@@ -66,7 +70,7 @@ namespace SEGUIApp {
 				}
 
 				if (document_.HasMember("lastUpdateId")) {
-					updateId = document_["lastUpdateId"].GetInt();
+					updateId = document_["lastUpdateId"].GetInt64();
 					const rj::Value& bids = document_["bids"];
 					const rj::Value& asks = document_["asks"];
 					baList_t bidsList;
@@ -88,11 +92,11 @@ namespace SEGUIApp {
 						const rj::Value& data = document_["data"];
 
 						if (document_.HasMember("stream") && data["e"] == "depthUpdate") {
-							if (data["u"].GetInt() <= updateId) {
+							if (data["u"].GetInt64() <= updateId) {
 								continue;
 							}
-							else if (data["U"].GetInt() <= updateId + 1 &&
-								data["u"].GetInt() >= updateId + 1)
+							else if (data["U"].GetInt64() <= updateId + 1 &&
+								data["u"].GetInt64() >= updateId + 1)
 							{
 								startTime_ = data["E"].GetInt64();
 
@@ -146,6 +150,8 @@ namespace SEGUIApp {
 				hasNext_ = false;
 				return false;
 			}
+			// No other way to release memory between files.
+			document_ = rj::Document();
 
 			return hasNext_ = true;
 		}
@@ -158,7 +164,7 @@ namespace SEGUIApp {
 				if (document_.HasMember("stream")) {
 					const rj::Value& data = document_["data"];
 
-					if (std::string(data["e"].GetString()) == "depthUpdate") {
+					if (updateBook_ && std::string(data["e"].GetString()) == "depthUpdate") {
 						hasNext_ = updateDepth(data);
 					}
 					else if (std::string(data["e"].GetString()) == "trade") {
@@ -219,7 +225,7 @@ namespace SEGUIApp {
 
 			return true;
 		}
-
+		
 		bool updateTrade(const rj::Value& data) {
 			TradeUpdate update;
 			update.eventTime = data["E"].GetInt64();

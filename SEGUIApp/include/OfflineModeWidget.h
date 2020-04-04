@@ -2,6 +2,7 @@
 
 #include <algorithm>
 
+#include <QtConcurrent/QtConcurrent>
 #include <QDebug>
 #include <QtCore/QDateTime>
 #include <QtCore/QDirIterator>
@@ -29,8 +30,8 @@ namespace SEGUIApp {
 		DataAggregator dataAggregator_{ bookDepthModel_, 15 };
 		FileDataModel fileDataModel_;
 		FileDataParser fileDataParser_{ bookDepthModel_ };
-		_int64 from_ = 1557523800000;
-		_int64 to_   = 1557533700000;
+		_int64 from_ = 1585586700000;
+		_int64 to_   = 1585596600000;
 		QListWidget* messageList_;
 
 	public:
@@ -47,7 +48,7 @@ namespace SEGUIApp {
 			connect(offlineMode_.dateTimeFrom, &QDateTimeEdit::dateTimeChanged, this, &OfflineModeWidget::from);
 			connect(offlineMode_.dateTimeTo, &QDateTimeEdit::dateTimeChanged, this, &OfflineModeWidget::to);
 			connect(&fileDataParser_, &FileDataParser::depthUpdated, &dataAggregator_, &DataAggregator::onDepthUpdated);
-			connect(&fileDataParser_, &FileDataParser::trade, &dataAggregator_, &DataAggregator::onTrade);
+			connect(&fileDataParser_, &FileDataParser::trade, &dataAggregator_, &DataAggregator::onTrade, Qt::ConnectionType::DirectConnection);
 			
 			connect(offlineMode_.fileTable, &QAbstractItemView::doubleClicked, this, &OfflineModeWidget::onFileRowDClicked);
 		}
@@ -55,6 +56,10 @@ namespace SEGUIApp {
 	private:
 		bool getNextFile() {
 			const int nextRow = currentFileIndex_.row() + 1;
+			if (nextRow >= fileDataModel_.rowCount()) {
+				postMessage("No more files to process. Data might be incomplete.", Message::M_INFO);
+				return false;
+			}
 			QModelIndex init = fileDataModel_.createIndex(nextRow, 0);
 			QModelIndex filePath = fileDataModel_.createIndex(nextRow, 3);
 			currentFileIndex_ = init;
@@ -69,7 +74,7 @@ namespace SEGUIApp {
 			return false;
 		}
 
-		void initBook(const QString& path);
+		void initBook(const QString& path, bool isInit);
 
 		void from(const QDateTime& dateTime);
 
@@ -79,15 +84,16 @@ namespace SEGUIApp {
 			if (index.isValid()) {
 				QModelIndex init = fileDataModel_.createIndex(index.row(), 0);
 				QModelIndex filePath = fileDataModel_.createIndex(index.row(), 3);
+				bool isInit = true;
 
 				if (fileDataModel_.data(init, Qt::DisplayRole).toString() != "INIT") {
-					qErrnoWarning("It is not an INIT file. Book depth would be invalid!");
-					return;
+					postMessage("Not INIT file! Book depth will not be updated!", Message::M_INFO);
+					isInit = false;
 				}
 
 				currentFileIndex_ = init;
 				
-				initBook(fileDataModel_.data(filePath, Qt::DisplayRole).toString());
+				initBook(fileDataModel_.data(filePath, Qt::DisplayRole).toString(), isInit);
 			}
 			else {
 				qDebug() << "CLICKED but err!";
@@ -107,6 +113,22 @@ namespace SEGUIApp {
 		}
 
 		void readNext() {
+			QFuture<void> future = QtConcurrent::run([&]() {
+				while (fileDataParser_.hasNext()) {
+					fileDataParser_.next();
+				}
+
+				while (!fileDataParser_.reachedEnd() && getNextFile()) {
+					while (fileDataParser_.hasNext()) {
+						fileDataParser_.next();
+					}
+				}
+
+				dataAggregator_.printDebug();
+			});
+		}
+
+		void readNext1() {
 			while (fileDataParser_.hasNext()) {
 				fileDataParser_.next();
 			}
