@@ -11,7 +11,7 @@ void SEGUIApp::OfflineModeWidget::initBook(const QString& path, bool isInit) {
 	postMessage(infoMessage, Message::M_INFO);
 	// !!! CHANGE false to isInit !!!
 	if (fileDataParser_.initBook(path, false, from_, to_)) {
-		dataAggregator_.init(QDateTime::fromMSecsSinceEpoch(std::max(from_, fileDataParser_.getStartTime())));
+		dataAggregator_->init(QDateTime::fromMSecsSinceEpoch(std::max(from_, fileDataParser_.getStartTime())));
 	}
 	else {
 		postMessage("Can't initiate file parser!", Message::M_ERROR);
@@ -28,7 +28,7 @@ void SEGUIApp::OfflineModeWidget::from(const QDateTime& dateTime) {
 void SEGUIApp::OfflineModeWidget::openFileDialog() {
 	/*auto url = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
 	"D://Binance BTC-USDT");*/
-	QString url = "D://Binance BTC-USDT";
+	QString url = "C://Binance BTC-USDT";
 
 	if ("" == url) return;
 

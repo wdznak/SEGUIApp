@@ -60,7 +60,10 @@ namespace SEGUIApp {
 				return false;
 			}
 
-			if (!updateBook_) return true;
+			if (!updateBook_) {
+				hasNext_ = true;
+				return true;
+			}
 			
 			if (hasNext_ = static_cast<bool>(stream_.getline(&buffer[0], BUFF_SIZE, '\r\n'))) {
 				document_.Parse(&buffer[0]);
@@ -235,6 +238,10 @@ namespace SEGUIApp {
 			update.price     = data["p"].GetString();
 			update.quantity  = data["q"].GetString();
 			update.isBuyerMarketMaker = data["m"].GetBool();
+
+			/*qDebug() << "Trade event:" << QDateTime::fromMSecsSinceEpoch(update.eventTime);
+			qDebug() << "Trade from_):" << QDateTime::fromMSecsSinceEpoch(from_);
+			qDebug() << "Trade to_:" << QDateTime::fromMSecsSinceEpoch(to_);*/
 			
 			if (from_ != 0 && from_ > update.eventTime && to_ >= update.eventTime) {
 				return true;

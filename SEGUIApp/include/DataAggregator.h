@@ -21,14 +21,15 @@ namespace SEGUIApp {
 		BookDepthModel::baList_t orderBook_;
 		_int64 startTimeStamp_ = 0;
 		_int64 endTimeStamp_ = 0;
-		std::unique_ptr<StatisticsI> statistics_;
+		//std::unique_ptr<StatisticsI> statistics_;
+		StatisticsI* statistics_;
 
 	public:
 		// Interval has to be provided in minutes!
-		DataAggregator(BookDepthModel& bookDepth, size_t interval)
-			: bookDepth_(bookDepth), interval_(interval) 
+		DataAggregator(BookDepthModel& bookDepth, size_t interval, StatisticsI* statistics)
+			: bookDepth_(bookDepth), interval_(interval), statistics_(statistics)
 		{
-			statistics_ = std::make_unique<BasicStatistics>();
+			//statistics_ = std::make_unique<BasicStatistics>();
 		};
 
 		/*
@@ -38,9 +39,9 @@ namespace SEGUIApp {
 		 */
 		void init(QDateTime timeStamp) {
 			QTime time = timeStamp.time();
-			qDebug() << timeStamp;
+			qDebug() << "Init time: " << timeStamp;
 
-			if (!time.minute() % interval_ == 0 && !time.second() == 0) {
+			if (!(time.minute() % interval_ == 0) && !(time.second() == 0)) {
 				if (time.minute() % interval_ == 0 && time.second() > 0) {
 					time = time.addSecs(interval_ * 60);
 				}
@@ -59,8 +60,8 @@ namespace SEGUIApp {
 			
 			startTimeStamp_ = timeStamp.toMSecsSinceEpoch();
 			endTimeStamp_ = timeStamp.addSecs(interval_ * 60).toMSecsSinceEpoch();
-			qDebug() << QDateTime::fromMSecsSinceEpoch(startTimeStamp_);
-			qDebug() << QDateTime::fromMSecsSinceEpoch(endTimeStamp_);
+			qDebug() << "Init start: " << QDateTime::fromMSecsSinceEpoch(startTimeStamp_);
+			qDebug() << "Init end: " << QDateTime::fromMSecsSinceEpoch(endTimeStamp_);
 			statistics_->startInterval(startTimeStamp_);
 			// init depth in statistics if necessery
 		}
@@ -93,6 +94,9 @@ namespace SEGUIApp {
 
 		void onTrade(const TradeUpdate& trade) {
 			static uint count = 0;
+			/*qDebug() << "Event:" << QDateTime::fromMSecsSinceEpoch(trade.eventTime);
+			qDebug() << "Start:" << QDateTime::fromMSecsSinceEpoch(startTimeStamp_);
+			qDebug() << "End:" << QDateTime::fromMSecsSinceEpoch(endTimeStamp_);*/
 			
 			if (trade.eventTime < startTimeStamp_) {
 				return;

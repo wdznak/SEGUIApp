@@ -20,6 +20,14 @@ namespace SEGUIApp {
 		size_t buyTrans = 0;
 		size_t sellTrans = 0;
 	};
+
+	struct BasicTradeStruct {
+		std::unordered_map<_int64, UserData> users;
+		size_t priceDown = 0;
+		size_t priceUp = 0;
+		size_t totalTransactions = 0;
+		double volume = 0;
+	};
 	
 	struct comp {
 		bool operator()(const std::pair<_int64, UserData>& a, const std::pair<_int64, UserData>& b) const {
@@ -29,15 +37,11 @@ namespace SEGUIApp {
 
 	class BasicTradeStats : public TradeStatsI {
 	public:
-		std::unordered_map<_int64, UserData> biggestFish_;
+		BasicTradeStruct data;
 		_int64 lastUpdateTimestamp_;
 	private:
 		bool isUp_ = true;
 		double refPrice_ = 0;
-		size_t priceDown_ = 0;
-		size_t priceUp_ = 0;
-		size_t totalTransactions_ = 0;
-		double volume_ = 0;
 	public:
 		BasicTradeStats() = default;
 		BasicTradeStats(QString refPrice)
@@ -48,44 +52,45 @@ namespace SEGUIApp {
 			double price = trade.price.toDouble();
 			double quantity = trade.quantity.toDouble();
 
-			totalTransactions_++;
-			volume_ += quantity;
+			data.totalTransactions++;
+			data.volume += quantity;
 
-			biggestFish_[trade.buyerId].totalAmount += quantity;
-			biggestFish_[trade.buyerId].totalTrans++;
-			biggestFish_[trade.buyerId].buyTrans++;
-			biggestFish_[trade.buyerId].buyAmount += quantity;
+			data.users[trade.buyerId].totalAmount += quantity;
+			data.users[trade.buyerId].totalTrans++;
+			data.users[trade.buyerId].buyTrans++;
+			data.users[trade.buyerId].buyAmount += quantity;
 
-			biggestFish_[trade.sellerId].totalAmount -= quantity;
-			biggestFish_[trade.sellerId].totalTrans++;
-			biggestFish_[trade.sellerId].sellTrans++;
-			biggestFish_[trade.sellerId].sellAmount += quantity;
+			data.users[trade.sellerId].totalAmount -= quantity;
+			data.users[trade.sellerId].totalTrans++;
+			data.users[trade.sellerId].sellTrans++;
+			data.users[trade.sellerId].sellAmount += quantity;
 
 			if (refPrice_ == price) {
 				if (isUp_) {
-					priceUp_++;
+					data.priceUp++;
 				}
 				else {
-					priceDown_++;
+					data.priceDown++;
 				}
 				return;
 			}
 			else if (refPrice_ < price) {
 				isUp_ = true;
-				priceUp_++;
+				data.priceUp++;
 			}
 			else {
 				isUp_ = false;
-				priceDown_++;
+				data.priceDown++;
 			}
 
 			refPrice_ = price;
 		}
 
 		void printDebug() override {
-			qDebug() << "Transactions: " << totalTransactions_ << " | Volume: " << volume_;
+			qDebug() << "Transactions: " << data.totalTransactions << " | Volume: " << data.volume << "\n"
+				<< "Price went up: " << data.priceUp << " | Price went down: " << data.priceDown;
 
-			std::vector<std::pair<_int64, UserData>> elems(biggestFish_.begin(), biggestFish_.end());
+			/*std::vector<std::pair<_int64, UserData>> elems(biggestFish_.begin(), biggestFish_.end());
 			std::sort(elems.begin(), elems.end(), comp());
 
 			int c = 0;
@@ -117,8 +122,8 @@ namespace SEGUIApp {
 					<< " | Sell amount:            " << it->second.sellAmount;
 			}
 
-			qDebug() << "Total buyed: " << buySum << "\n"
-				<< "Total selled: " << sellSum;
+			qDebug() << "Total bought: " << buySum << "\n"
+				<< "Total sold: " << sellSum;*/
 		}
 	};
 

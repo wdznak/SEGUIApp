@@ -101,6 +101,13 @@
     </layout>
    </item>
    <item>
+    <layout class="QVBoxLayout" name="chartLayout">
+     <item>
+      <widget class="QTableView" name="statsTable"/>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QSplitter" name="splitter_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

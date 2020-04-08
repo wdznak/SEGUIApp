@@ -2,7 +2,11 @@
 
 #include <algorithm>
 
+#include <QCandlestickSeries>
+#include <QChart>
+#include <QChartView>
 #include <QtConcurrent/QtConcurrent>
+#include <QtCore/QFutureWatcher>
 #include <QDebug>
 #include <QtCore/QDateTime>
 #include <QtCore/QDirIterator>
@@ -12,10 +16,12 @@
 #include "ui_OfflineModeWidget.h"
 
 #include "ANamespace.h"
+#include "BasicStatistics.h"
 #include "BookDepthModel.h"
 #include "DataAggregator.h"
 #include "FileDataModel.h"
 #include "FileDataParser.h"
+#include "StatsTableModel.h"
 
 namespace SEGUIApp {
 
@@ -27,16 +33,22 @@ namespace SEGUIApp {
 
 		BookDepthModel bookDepthModel_;
 		QModelIndex currentFileIndex_;
-		DataAggregator dataAggregator_{ bookDepthModel_, 15 };
+		std::unique_ptr<DataAggregator> dataAggregator_;
 		FileDataModel fileDataModel_;
 		FileDataParser fileDataParser_{ bookDepthModel_ };
 		_int64 from_ = 1585586700000;
 		_int64 to_   = 1585596600000;
 		QListWidget* messageList_;
+		StatsTableModel statsTableModel_;
+		std::unique_ptr<StatisticsI> statistics_;
 
 	public:
 		OfflineModeWidget() {
 			offlineMode_.setupUi(this);
+
+			statistics_ = std::make_unique<BasicStatistics>();
+			dataAggregator_ = std::make_unique<DataAggregator>(bookDepthModel_, 5, statistics_.get());
+
 			messageList_ = offlineMode_.messageList;
 			offlineMode_.dateTimeFrom->setDateTime(QDateTime::currentDateTime());
 			offlineMode_.dateTimeTo->setDateTime(QDateTime::currentDateTime());
@@ -47,8 +59,8 @@ namespace SEGUIApp {
 			connect(offlineMode_.readNext, &QPushButton::clicked, this, &OfflineModeWidget::readNext);
 			connect(offlineMode_.dateTimeFrom, &QDateTimeEdit::dateTimeChanged, this, &OfflineModeWidget::from);
 			connect(offlineMode_.dateTimeTo, &QDateTimeEdit::dateTimeChanged, this, &OfflineModeWidget::to);
-			connect(&fileDataParser_, &FileDataParser::depthUpdated, &dataAggregator_, &DataAggregator::onDepthUpdated);
-			connect(&fileDataParser_, &FileDataParser::trade, &dataAggregator_, &DataAggregator::onTrade, Qt::ConnectionType::DirectConnection);
+			connect(&fileDataParser_, &FileDataParser::depthUpdated, dataAggregator_.get(), &DataAggregator::onDepthUpdated);
+			connect(&fileDataParser_, &FileDataParser::trade, dataAggregator_.get(), &DataAggregator::onTrade, Qt::ConnectionType::DirectConnection);
 			
 			connect(offlineMode_.fileTable, &QAbstractItemView::doubleClicked, this, &OfflineModeWidget::onFileRowDClicked);
 		}
@@ -113,6 +125,7 @@ namespace SEGUIApp {
 		}
 
 		void readNext() {
+			QFutureWatcher<void>* watcher = new QFutureWatcher<void>();
 			QFuture<void> future = QtConcurrent::run([&]() {
 				while (fileDataParser_.hasNext()) {
 					fileDataParser_.next();
@@ -124,22 +137,16 @@ namespace SEGUIApp {
 					}
 				}
 
-				dataAggregator_.printDebug();
+				dataAggregator_->printDebug();
 			});
-		}
+			connect(watcher, &QFutureWatcher<void>::finished, [this]() {
+				postMessage("Reading is finished!", Message::M_INFO);
+				BasicStatistics* bs = (BasicStatistics*)statistics_.get();
+				statsTableModel_.fillModel(bs->getIntervals());
+				offlineMode_.statsTable->setModel(&statsTableModel_);
+				});
 
-		void readNext1() {
-			while (fileDataParser_.hasNext()) {
-				fileDataParser_.next();
-			}
-
-			while (!fileDataParser_.reachedEnd() && getNextFile()) {
-				while (fileDataParser_.hasNext()) {
-					fileDataParser_.next();
-				}
-			}
-			
-			dataAggregator_.printDebug();
+			watcher->setFuture(future);
 		}
 
 		void to(const QDateTime& dateTime);

@@ -1,29 +1,23 @@
 #pragma once
 
-#include <algorithm>
-#include <iterator>
-#include <unordered_map>
-#include <vector>
-
+#include <QtCore/QAbstractTableModel>
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
+#include <QtGlobal>
+#include <QtGui/QBrush>
+#include <QtGui/QColor>
+
+#include <map>
+#include <string>
+#include <vector>
 
 #include "ANamespace.h"
-#include "StatisticsI.h"
-#include "BasicTradeStats.h"
+#include "BasicStatistics.h"
 
 namespace SEGUIApp {
 
-	class BasicStatistics : public StatisticsI
+	class StatsTableModel : public QAbstractTableModel
 	{
-	public:
-		struct Interval {
-			_int64 startTime = 0;
-			_int64 endTime = 0;
-			// Todo: Optimize memory by using only BasicTradeStruct.
-			BasicTradeStats tradeStats;
-		};
-
 	private:
 		struct comp {
 			bool operator()(const std::pair<_int64, double>& a, const std::pair<_int64, double>& b) const {
@@ -31,71 +25,80 @@ namespace SEGUIApp {
 			}
 		};
 
-		std::vector<Interval> intervals_;
-		size_t startIntervals_ = 0;
-		size_t endIntervals_ = 0;
-		BasicTradeStats* tradeStats_;
+		std::vector<std::vector<QVariant>> modelData_;
+	public: 
+		StatsTableModel() = default;
 
-	public:
-		BasicStatistics() {}
-
-		void updateDepth() override {}
-		void updateTrade(const TradeUpdate& trade) override {
-			tradeStats_->trade(trade);
+		int columnCount(const QModelIndex& parent = QModelIndex()) const override {
+			Q_UNUSED(parent);
+			return 8;
 		}
 
-		void endInterval(_int64 endTimeInterval) override {
-			if (startIntervals_ -1 != endIntervals_) {
-				qFatal("End interval desynchronization in BasicStatics!");
+		QVariant data(const QModelIndex& index, int role) const override {
+			if (role == Qt::DisplayRole) {
+				if (index.row() > modelData_.size() - 1)
+					return QVariant();
+
+				return modelData_[index.row()][index.column()];
 			}
 
-			intervals_[intervals_.size() - 1].endTime = endTimeInterval;
-			endIntervals_++;
+			return QVariant();
 		}
 
-		const std::vector<Interval>& getIntervals() {
-			return intervals_;
+		QVariant headerData(int section, Qt::Orientation orientation, int role) const override {
+			if (role != Qt::DisplayRole)
+				return QVariant();
+
+			if (orientation == Qt::Horizontal) {
+				switch (section) {
+				case 0: return tr("Time");
+				case 1: return tr("B/S diff");
+				case 2: return tr("Big bought");
+				case 3: return tr("Big sold");
+				case 4: return tr("Diff");
+				case 5: return tr("Fish bought");
+				case 6: return tr("Fish sold");
+				case 7: return tr("Diff");
+				default: return QVariant();
+				}
+			}
+			return QVariant();
 		}
 
-		void startInterval(_int64 startTimeInterval) override {
-			if (startIntervals_ != endIntervals_) {
-				qFatal("Start interval desynchronization in BasicStatics!");
-			}
-
-			Interval interval;
-			interval.startTime = startTimeInterval;
-			intervals_.push_back(interval);
-
-			if (intervals_.size() == 1) {
-				tradeStats_ = &intervals_[0].tradeStats;
-			}
-			else {
-				size_t size = intervals_.size();
-				tradeStats_ = &intervals_[size - 1].tradeStats;
-				//intervals_[size - 2].tradeStats.printDebug();
-			}
-
-			startIntervals_++;
+		int rowCount(const QModelIndex& parent = QModelIndex()) const override {
+			Q_UNUSED(parent);
+			return modelData_.size();
 		}
 
-		void printDebug() override {
+		void fillModel(const std::vector<BasicStatistics::Interval>& intervals) {
 			std::unordered_map<_int64, double> value;
+			const int period = 1;
 
-			for (auto e : intervals_) {
-				qDebug() << "From: " << QDateTime::fromMSecsSinceEpoch(e.startTime);
-				if (e.endTime == 0) {
-					qDebug() << "To:" << QDateTime::fromMSecsSinceEpoch(tradeStats_->lastUpdateTimestamp_);
-				}
-				else {
-					qDebug() << "To:" << QDateTime::fromMSecsSinceEpoch(e.endTime);
-				}
-				//e.tradeStats.printDebug();
-				for (auto f : e.tradeStats.data.users) {
-					value[f.first] += f.second.totalAmount;
-				}
+			if (intervals.size() < period) {
+				return;
 			}
-			qDebug() << "\n";
 
+			int j = 0;
+			for (int i = 0; i < intervals.size(); ++i) {
+				for (j = i; j < period + i; ++j) {
+					for (auto f : intervals[j].tradeStats.data.users) {
+						value[f.first] += f.second.totalAmount;
+					}
+				}
+				std::vector<QVariant> data(8);
+				qDebug() << QDateTime::fromMSecsSinceEpoch(intervals[j].startTime);
+				data[0] = QDateTime::fromMSecsSinceEpoch(intervals[j].startTime);
+				stats(value, data);
+				modelData_.push_back(std::move(data));
+				value.clear();
+				if (period + i >= intervals.size() - 1) return;
+			}
+
+		}
+
+	private:
+		void stats(const std::unordered_map<_int64, double>& value, std::vector<QVariant>& data) {
+			
 			std::vector<std::pair<_int64, double>> elems(value.begin(), value.end());
 			std::sort(elems.begin(), elems.end(), comp());
 
@@ -119,7 +122,7 @@ namespace SEGUIApp {
 				totalBuy += elems[i].second;
 			}
 			qDebug() << totalBuy << "\n";
-			
+
 			qDebug() << "Total sellers----------------- " << totalSellers << " ------------------";
 			for (int i = elems.size() - 1; i > elems.size() - totalBuyers; --i) {
 				totalSell += elems[i].second;
@@ -127,6 +130,7 @@ namespace SEGUIApp {
 			qDebug() << totalSell << "\n\n";
 			double perDiff = ((totalBuyers - totalSellers) / ((totalBuyers + totalSellers) / 2.0f)) * 100;
 			qDebug() << "user % diff buy/sell: " << perDiff << "\n";
+			data[1] = perDiff;
 
 			const double perTreshold = 0.05f;
 			int valTreshold = totalBuyers * perTreshold;
@@ -141,6 +145,8 @@ namespace SEGUIApp {
 			qDebug() << "Top " << valTreshold << " Buyers ------------------------------";
 			qDebug() << "Bought:         " << currAmountB;
 			qDebug() << "The rest bought:" << (totalBuy - currAmountB) << "\n";
+			data[2] = currAmountB;
+			data[5] = (totalBuy - currAmountB);
 
 			valTreshold = totalSellers * perTreshold;
 			double currAmountS = 0;
@@ -154,17 +160,17 @@ namespace SEGUIApp {
 
 			qDebug() << "Top " << valTreshold << " Sellers ------------------------------";
 			qDebug() << "Sold:         " << currAmountS;
+			data[3] = currAmountS;
 			qDebug() << "The rest sold:" << (totalSell + currAmountS) << "\n";
+			data[6] = (totalSell + currAmountS);
 
 			qDebug() << "Whales diff: " << currAmountB - currAmountS;
+			data[4] = currAmountB - currAmountS;
 			qDebug() << "Fish diff:   " << (totalBuy - currAmountB) - std::abs(totalSell + currAmountS);
-
-			qDebug() << "Intervals: " << intervals_.size();
-			qDebug() << "Open: " << startIntervals_ << " Close: " << endIntervals_;
+			data[7] = (totalBuy - currAmountB) - std::abs(totalSell + currAmountS);
 			qDebug() << "Total Buy:  " << totalBuy;
 			qDebug() << "Total Sell: " << totalSell;
 		}
 	};
 
 } // namespace SEGUIApp
-

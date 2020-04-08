@@ -71,9 +71,17 @@
      <string>Help</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuWindow">
+    <property name="title">
+     <string>Window</string>
+    </property>
+    <addaction name="actionOrder_Book"/>
+    <addaction name="actionStatistics"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuConnections"/>
    <addaction name="menuHelp"/>
+   <addaction name="menuWindow"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="enabled">
@@ -105,6 +113,25 @@
   <action name="actionMode">
    <property name="text">
     <string>Live</string>
+   </property>
+  </action>
+  <action name="actionOrder_Book">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Order Book</string>
+   </property>
+  </action>
+  <action name="actionStatistics">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Statistics</string>
    </property>
   </action>
  </widget>

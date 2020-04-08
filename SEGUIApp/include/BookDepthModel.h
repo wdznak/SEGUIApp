@@ -44,7 +44,7 @@ namespace SEGUIApp {
 		_int64 lastUpdateID_ = 0;
 
 	public:
-		BookDepthModel() {}
+		BookDepthModel() = default;
 
 		int columnCount(const QModelIndex& parent = QModelIndex()) const override {
 			Q_UNUSED(parent);

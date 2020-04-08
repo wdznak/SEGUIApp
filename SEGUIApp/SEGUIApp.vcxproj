@@ -188,6 +188,7 @@
   <ItemGroup>
     <ClInclude Include="include\BasicStatistics.h" />
     <ClInclude Include="include\StatisticsI.h" />
+    <ClInclude Include="include\StatsTableModel.h" />
     <ClInclude Include="include\TradeStatsI.h" />
     <QtMoc Include="include\BinMessageDispatch.h">
     </QtMoc>

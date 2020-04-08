@@ -37,7 +37,7 @@ namespace SEGUIApp {
 		std::unique_ptr<ConnectionsManager> connectionsManager_;
 		std::unique_ptr<ConnectionsTabManager> connectionsTabManager_;
 		std::unique_ptr<LiveModeWidget> liveModeWidget_;
-		bool liveMode = true;
+		bool liveMode = false;
 		ModelsManager modelsManager_;
 		std::unique_ptr<OfflineModeWidget> offlineModeWidget_;
 

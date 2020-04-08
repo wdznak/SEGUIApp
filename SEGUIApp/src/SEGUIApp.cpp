@@ -19,10 +19,10 @@ namespace SEGUIApp {
 		connectionsTabManager_ = std::make_unique<ConnectionsTabManager>();
 		connectionsManager_ = std::make_unique<ConnectionsManager>(&modelsManager_);
 		liveModeWidget_ = std::make_unique<LiveModeWidget>(connectionsManager_.get());
-
-		//ui.stackedWidget->addWidget(liveModeWidget_.get());
 		offlineModeWidget_ = std::make_unique<OfflineModeWidget>();
+
 		ui.stackedWidget->addWidget(offlineModeWidget_.get());
+		ui.stackedWidget->addWidget(liveModeWidget_.get());
 
 		availableConnDialog_ = std::make_unique<AvailableConnectionsDialog>(this);
 		availableConnDialog_->setModelData(connectionsManager_->availableConnections());
@@ -43,14 +43,14 @@ namespace SEGUIApp {
 	}
 
 	void SEGUIApp::switchMode() {
-		if (!offlineModeWidget_) {
+		/*if (!offlineModeWidget_) {
 			offlineModeWidget_ = std::make_unique<OfflineModeWidget>();
 			ui.stackedWidget->addWidget(offlineModeWidget_.get());
 			ui.stackedWidget->setCurrentIndex(1);
 			return;
-		}
+		}*/
 
-		if (liveMode) {
+		if (!liveMode) {
 			ui.stackedWidget->setCurrentIndex(1);
 		}
 		else {
