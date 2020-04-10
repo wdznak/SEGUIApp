@@ -1,5 +1,8 @@
 ## SEGUIApp
 
+**Update 10/04/20** Project suspended.
+Recently I added an offline mode to process data from files to calculate some statistics. The project detoured significantly from my initial idea and got a little bit messy, but I am happy with the overall modularity and ease of implementing new features. At this point, I did not learn new things by pushing it further so I decided to abandon it. At least for now. It was a fun project that thought me not only C++, Qt, design patterns but also Python and machine learning (Keras). 
+
 **SEGUIApp** is an app for gathering data from stock exchanges, saving it to files and present a live view to the user. It also provides tools for modeling data that can be exported to CSV files and used to train machine learning models.
 
 
@@ -20,3 +23,16 @@ Data saved and compressed with 7zip
 
 
 ![](../assets/files.png)
+
+
+
+
+
+
+
+
+Offline mode
+
+
+
+![](../assets/offmode.png)
