@@ -43,18 +43,13 @@ namespace SEGUIApp {
 	}
 
 	void SEGUIApp::switchMode() {
-		/*if (!offlineModeWidget_) {
-			offlineModeWidget_ = std::make_unique<OfflineModeWidget>();
-			ui.stackedWidget->addWidget(offlineModeWidget_.get());
-			ui.stackedWidget->setCurrentIndex(1);
-			return;
-		}*/
-
 		if (!liveMode) {
 			ui.stackedWidget->setCurrentIndex(1);
+			ui.actionMode->setText(tr("Live Mode"));
 		}
 		else {
 			ui.stackedWidget->setCurrentIndex(0);
+			ui.actionMode->setText(tr("Offline Mode"));
 		}
 
 		liveMode = !liveMode;

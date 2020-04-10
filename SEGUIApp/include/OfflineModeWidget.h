@@ -47,7 +47,7 @@ namespace SEGUIApp {
 			offlineMode_.setupUi(this);
 
 			statistics_ = std::make_unique<BasicStatistics>();
-			dataAggregator_ = std::make_unique<DataAggregator>(bookDepthModel_, 5, statistics_.get());
+			dataAggregator_ = std::make_unique<DataAggregator>(bookDepthModel_, 30, statistics_.get());
 
 			messageList_ = offlineMode_.messageList;
 			offlineMode_.dateTimeFrom->setDateTime(QDateTime::currentDateTime());

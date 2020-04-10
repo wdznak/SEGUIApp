@@ -53,11 +53,11 @@ namespace SEGUIApp {
 				switch (section) {
 				case 0: return tr("Time");
 				case 1: return tr("B/S diff");
-				case 2: return tr("Big bought");
-				case 3: return tr("Big sold");
+				case 2: return tr("Top 20% bought");
+				case 3: return tr("Top 20% sold");
 				case 4: return tr("Diff");
-				case 5: return tr("Fish bought");
-				case 6: return tr("Fish sold");
+				case 5: return tr("Low 80% bought");
+				case 6: return tr("Low 80% sold");
 				case 7: return tr("Diff");
 				default: return QVariant();
 				}
@@ -85,10 +85,21 @@ namespace SEGUIApp {
 						value[f.first] += f.second.totalAmount;
 					}
 				}
+				int c = 0;
+				for (auto it = value.begin(); it != value.end(); ) {
+					if (std::fabs(it->second) < .00001f) {
+						++c;
+						it = value.erase(it);
+					}
+					else {
+						++it;
+					}
+				}
+
 				std::vector<QVariant> data(8);
-				qDebug() << QDateTime::fromMSecsSinceEpoch(intervals[j].startTime);
 				data[0] = QDateTime::fromMSecsSinceEpoch(intervals[j].startTime);
 				stats(value, data);
+				qDebug() << data[1] << ", " << data[4] << ", " << data[7];
 				modelData_.push_back(std::move(data));
 				value.clear();
 				if (period + i >= intervals.size() - 1) return;
@@ -117,19 +128,16 @@ namespace SEGUIApp {
 			totalBuyers = std::distance(elems.begin(), mid);
 			totalSellers = std::distance(mid, elems.end());
 
-			qDebug() << "Total buyers--------------- " << totalBuyers << " --------------------";
 			for (int i = 0; i <= totalBuyers; ++i) {
 				totalBuy += elems[i].second;
 			}
-			qDebug() << totalBuy << "\n";
 
-			qDebug() << "Total sellers----------------- " << totalSellers << " ------------------";
 			for (int i = elems.size() - 1; i > elems.size() - totalBuyers; --i) {
 				totalSell += elems[i].second;
 			}
-			qDebug() << totalSell << "\n\n";
+
 			double perDiff = ((totalBuyers - totalSellers) / ((totalBuyers + totalSellers) / 2.0f)) * 100;
-			qDebug() << "user % diff buy/sell: " << perDiff << "\n";
+			
 			data[1] = perDiff;
 
 			const double perTreshold = 0.05f;
@@ -142,9 +150,6 @@ namespace SEGUIApp {
 				currAmountB += elems[i].second;
 			}
 
-			qDebug() << "Top " << valTreshold << " Buyers ------------------------------";
-			qDebug() << "Bought:         " << currAmountB;
-			qDebug() << "The rest bought:" << (totalBuy - currAmountB) << "\n";
 			data[2] = currAmountB;
 			data[5] = (totalBuy - currAmountB);
 
@@ -158,18 +163,10 @@ namespace SEGUIApp {
 				currAmountS += std::abs(elems[i].second);
 			}
 
-			qDebug() << "Top " << valTreshold << " Sellers ------------------------------";
-			qDebug() << "Sold:         " << currAmountS;
 			data[3] = currAmountS;
-			qDebug() << "The rest sold:" << (totalSell + currAmountS) << "\n";
 			data[6] = (totalSell + currAmountS);
-
-			qDebug() << "Whales diff: " << currAmountB - currAmountS;
 			data[4] = currAmountB - currAmountS;
-			qDebug() << "Fish diff:   " << (totalBuy - currAmountB) - std::abs(totalSell + currAmountS);
 			data[7] = (totalBuy - currAmountB) - std::abs(totalSell + currAmountS);
-			qDebug() << "Total Buy:  " << totalBuy;
-			qDebug() << "Total Sell: " << totalSell;
 		}
 	};
 

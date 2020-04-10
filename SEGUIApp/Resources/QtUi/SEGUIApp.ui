@@ -112,7 +112,7 @@
   </action>
   <action name="actionMode">
    <property name="text">
-    <string>Live</string>
+    <string>Offline Mode</string>
    </property>
   </action>
   <action name="actionOrder_Book">
